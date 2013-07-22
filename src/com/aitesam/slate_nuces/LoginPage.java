@@ -16,32 +16,33 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
-
-@SuppressLint("NewApi")
-public class LoginPage extends Activity {
+//@SuppressLint("NewApi")
+public class LoginPage extends Activity  {
 	// UI Objects
 	EditText mUid;
 	EditText mPassword;
-	Button mLoginButton;
+	ImageButton mLoginButton;
 	//Http Objects
 	private HttpClient httpClient = new DefaultHttpClient();
 	public Cookie cookie = null;
 	public  String cookies2;
 	public  String cookieString;
+	public String testa;
 	private static final int TIMEOUT_MS = 3000;
 	private static final String redirURL = "http://slateisb.nu.edu.pk/portal/relogin";
 	// Static Variabel for Multi Classes
@@ -54,19 +55,23 @@ public class LoginPage extends Activity {
 		//Setting View of UI
 		mUid=(EditText)findViewById(R.id.eid);
 		mPassword=(EditText)findViewById(R.id.pw);
-		mLoginButton=(Button)findViewById(R.id.btn_login);
+		mLoginButton=(ImageButton)findViewById(R.id.btn_login);
 		//
 		mLoginButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				if(isNetworkAvailable()){
 				//First Setting  Keys
 				mRollNumber=mUid.getText().toString();
 				mPass=mPassword.getText().toString();
 				do_login mLogin=new do_login();
 				mLogin.execute();
 				Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
-				
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "No Network", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 	}
@@ -83,7 +88,7 @@ public class LoginPage extends Activity {
 	        nameValuePairs.add(new BasicNameValuePair("flags", "0")); 
 	        nameValuePairs.add(new BasicNameValuePair("forcedownlevel", "0"));    
 	        nameValuePairs.add(new BasicNameValuePair("formdir", "9"));
-	        nameValuePairs.add(new BasicNameValuePair("eid", "i120515"));//mRollNumber  
+	        nameValuePairs.add(new BasicNameValuePair("eid", "i12055"));//mRollNumber  
 	        nameValuePairs.add(new BasicNameValuePair("pw", "password123"));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("trusted", "1"));
 	        HttpResponse end = null;
@@ -98,6 +103,11 @@ public class LoginPage extends Activity {
 	            cookies2 = ((AbstractHttpClient) httpClient).getCookieStore().getCookies().toString();
 	            Log.d("cookie", cookies2);
 	            end = response;
+	            String deviceVersion= Build.VERSION.RELEASE;
+	            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+	            String rs=Integer.toString(SDK_INT,10);
+	            Log.d("sdk",rs);
+	            
 	        } catch (Exception e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
@@ -131,6 +141,12 @@ public class LoginPage extends Activity {
 			startActivity(mMainIntent);
 		}
 	}
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
 	public void writeToFile(String data) {
 	    try {
 	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("config.txt", Context.MODE_PRIVATE));
@@ -142,12 +158,10 @@ public class LoginPage extends Activity {
 	        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
 	    } 
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login_page, menu);
-		return true;
-	}
+	
+	/*@Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+		return super.onCreateOptionsMenu(menu);
+	}*/
 
 }

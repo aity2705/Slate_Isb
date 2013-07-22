@@ -18,41 +18,46 @@
         android:layout_marginTop="119dp"
         android:ems="10"
         android:background="#808080"
+        android:gravity="center"
         android:hint="@string/uid_login" 
+        android:textColorHint="#EBF4FA"
         android:textColor="#EBF4FA">
 
         <requestFocus />
     </EditText>
-
-    <EditText
-        android:id="@+id/pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="119dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:background="#808080" 
-        android:textColor="#EBF4FA"/>
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pw"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
-        android:text="@string/btn_login" 
-        
-        />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/btn_login"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
         android:src="@drawable/fast_logo_s" />
+
+    <EditText
+        android:id="@+id/pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/eid"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:background="#808080"
+        android:ems="10"
+        android:hint="@string/upw_login"
+        android:inputType="textPassword"
+        android:textColor="#EBF4FA"
+        android:textColorHint="#EBF4FA" />
+
+    <ImageButton
+        android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pw"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@null"
+        android:src="@drawable/login_button_s" />
 
 </RelativeLayout>
