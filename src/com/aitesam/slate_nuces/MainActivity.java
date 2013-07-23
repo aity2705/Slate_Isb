@@ -5,9 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -17,7 +14,6 @@ import com.navdrawer.SimpleSideDrawer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,8 +31,6 @@ public class MainActivity extends SherlockActivity {
 	WebView mWebView;
 	public ImageView test;
 	private String mCookies;
-	String image_URL= "http://java.sogeti.nl/JavaBlog/wp-content/uploads/2009/04/android_icon_256.png";
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,15 +40,7 @@ public class MainActivity extends SherlockActivity {
 		ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayUseLogoEnabled(false);
 		mWebView=(WebView)findViewById(R.id.web_frag);
-		test=(ImageView)findViewById(R.id.web_image);
-		BitmapFactory.Options bmOptions;
-	    bmOptions = new BitmapFactory.Options();
-	    bmOptions.inSampleSize = 1;
-	    Bitmap bm = LoadImage(image_URL, bmOptions);
-		//.execute("http://java.sogeti.nl/JavaBlog/wp-content/uploads/2009/04/android_icon_256.png");
 		//Setting Up WebView
-		// finish();
-	    test.setImageBitmap(bm);
 		 mNav = new SimpleSideDrawer(this);
 	      mNav.setLeftBehindContentView(R.layout.drawer_layout);
 		
@@ -89,37 +75,6 @@ public class MainActivity extends SherlockActivity {
 	        mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");
 	        
 	}
-	private Bitmap LoadImage(String URL, BitmapFactory.Options options)
-	   {       
-	    Bitmap bitmap = null;
-	    InputStream in = null;       
-	       try {
-	           in = OpenHttpConnection(URL);
-	           bitmap = BitmapFactory.decodeStream(in, null, options);
-	           in.close();
-	       } catch (IOException e1) {
-	       }
-	       return bitmap;               
-	   }
-	private InputStream OpenHttpConnection(String strURL) throws IOException{
-		 InputStream inputStream = null;
-		 URL url = new URL(strURL);
-		 URLConnection conn = url.openConnection();
-
-		 try{
-		  HttpURLConnection httpConn = (HttpURLConnection)conn;
-		  httpConn.setRequestMethod("GET");
-		  httpConn.connect();
-
-		  if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-		   inputStream = httpConn.getInputStream();
-		  }
-		 }
-		 catch (Exception ex)
-		 {
-		 }
-		 return inputStream;
-		}
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	/*SubMenu sub = menu.addSubMenu("Theme");
@@ -201,5 +156,29 @@ public class MainActivity extends SherlockActivity {
 
 	    return ret;
 	}
+	/*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+	    ImageView bmImage;
+
+	    public DownloadImageTask(ImageView bmImage) {
+	        this.bmImage = bmImage;
+	    }
+
+	    protected Bitmap doInBackground(String... urls) {
+	        String urldisplay = urls[0];
+	        Bitmap mIcon11 = null;
+	        try {
+	            InputStream in = new java.net.URL(urldisplay).openStream();
+	            mIcon11 = BitmapFactory.decodeStream(in);
+	        } catch (Exception e) {
+	            Log.e("Error", e.getMessage());
+	            e.printStackTrace();
+	        }
+	        return mIcon11;
+	    }
+
+	    protected void onPostExecute(Bitmap result) {
+	        bmImage.setImageBitmap(result);
+	    }
+	}*/
 
 }
