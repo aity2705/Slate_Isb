@@ -22,5 +22,7 @@
     <string name="action_label_bak_none">None</string>
     <string name="action_label_bak_gradient">Gradient</string>
     <string name="action_label_bak_image">Image</string>
-
+	    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    
 </resources>

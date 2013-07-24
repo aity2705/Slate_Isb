@@ -1,14 +1,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/rightBehindMenuScroll" >
+    style="@style/leftBehindMenuScroll" >
 
-    <LinearLayout
-        style="@style/behindMenuScrollContent"
-        android:layout_height="380dp"
+    <LinearLayout style="@style/behindMenuScrollContent"
         android:paddingTop="25dp" >
-
         <TextView
             style="@style/behindMenuItemTitle"
-            android:text="Right" />
+            android:text="Left" />
         <TextView
             style="@style/behindMenuItemLabel"
             android:text="Item0" />
@@ -21,10 +18,15 @@
             android:text="BUTTON" />
 
         <ImageView
-            android:id="@+id/web_image"
-            android:layout_width="wrap_content"
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/dialog_frame" />
+            android:src="@drawable/icon" />
+        <WebView
+            android:id="@+id/webView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        
 
     </LinearLayout>
 </ScrollView>

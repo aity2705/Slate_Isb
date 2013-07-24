@@ -57,6 +57,7 @@ public class LoginPage extends Activity  {
 		mPassword=(EditText)findViewById(R.id.pw);
 		mLoginButton=(ImageButton)findViewById(R.id.btn_login);
 		//
+		Config.test_web="abc";
 		mLoginButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -88,7 +89,7 @@ public class LoginPage extends Activity  {
 	        nameValuePairs.add(new BasicNameValuePair("flags", "0")); 
 	        nameValuePairs.add(new BasicNameValuePair("forcedownlevel", "0"));    
 	        nameValuePairs.add(new BasicNameValuePair("formdir", "9"));
-	        nameValuePairs.add(new BasicNameValuePair("eid", "i12055"));//mRollNumber  
+	        nameValuePairs.add(new BasicNameValuePair("eid", "i120515"));//mRollNumber  
 	        nameValuePairs.add(new BasicNameValuePair("pw", "password123"));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("eid", mRollNumber));//mRollNumber  
 	        nameValuePairs.add(new BasicNameValuePair("pw", mPass));//mPass  

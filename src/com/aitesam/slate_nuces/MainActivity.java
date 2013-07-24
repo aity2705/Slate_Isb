@@ -17,12 +17,15 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends SherlockActivity {
@@ -31,6 +34,7 @@ public class MainActivity extends SherlockActivity {
 	WebView mWebView;
 	public ImageView test;
 	private String mCookies;
+	public WebView web_test;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,6 +65,11 @@ public class MainActivity extends SherlockActivity {
                 view.loadUrl(url);
                 return false; // then it is not handled by default action
            }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+            	 view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#pda-footer').hide();});");
+            	//view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#pda-portlet-menu').hide();});");
+            }
 
         });
 		//Setting Up Cookies
@@ -103,6 +112,17 @@ public class MainActivity extends SherlockActivity {
         case android.R.id.home:
             // TODO handle clicking the app icon/logo
         	mNav.toggleLeftDrawer();
+        	findViewById(R.id.behind_btn).setOnClickListener(new OnClickListener()
+            {
+            	@Override
+            	public void onClick(View v){
+        //    		
+            		//Toast.makeText(this, "asdasd", Toast.LENGTH_LONG);
+            		web_test=(WebView)findViewById(R.id.webView1);
+            		web_test.loadUrl("http://www.google.com");
+            	}
+            	
+            });
             return true;
         case R.id.menu_refresh:
         	//showDropDownNav();
