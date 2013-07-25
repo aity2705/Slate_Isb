@@ -138,10 +138,12 @@ public class LoginPage extends Activity  {
 		}
 		@Override 
 		protected void onPostExecute(String result){
-			writeToFile(result);
+			writeToFile(result,"config.txt");
 			//ab.setText(result);
-			Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
-			startActivity(mMainIntent);
+		finish();
+			//System.exit(1);
+			//Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
+			//startActivity(mMainIntent);
 		}
 	}
 	private boolean isNetworkAvailable() {
@@ -150,9 +152,9 @@ public class LoginPage extends Activity  {
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
-	public void writeToFile(String data) {
+	public void writeToFile(String data,String mFileName) {
 	    try {
-	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("config.txt", Context.MODE_PRIVATE));
+	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput(mFileName, Context.MODE_PRIVATE));
 	        outputStreamWriter.write(data);
 	        outputStreamWriter.close();
 	    }
@@ -161,7 +163,6 @@ public class LoginPage extends Activity  {
 	        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
 	    } 
 	}
-	
 	/*@Override
 	    public boolean onCreateOptionsMenu(Menu menu) {
 		return super.onCreateOptionsMenu(menu);

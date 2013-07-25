@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -12,6 +13,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.navdrawer.SimpleSideDrawer;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -35,8 +38,16 @@ public class MainActivity extends SherlockActivity {
 	public ImageView test;
 	private String mCookies;
 	public WebView web_test;
+	public int a=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		String flag_login_page=readFromFile("prefrence.txt");
+		Log.d("FileCheck", flag_login_page);
+		if(flag_login_page.equals("1")){
+		Intent logintest=new Intent(this,LoginPage.class);
+		startActivity(logintest);
+		writeToFile("1","prefrence.txt");
+		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//Setting Views
@@ -73,7 +84,7 @@ public class MainActivity extends SherlockActivity {
 
         });
 		//Setting Up Cookies
-        mCookies=readFromFile();
+        mCookies=readFromFile("config.txt");
         Log.d("Cookie_Read", mCookies);//For Debugging
         CookieSyncManager.createInstance(this);
 	       CookieManager cookieManager = CookieManager.getInstance();
@@ -143,14 +154,19 @@ public class MainActivity extends SherlockActivity {
     }
 	@Override
 	public void onBackPressed(){
+		if(mWebView.canGoBack()){
+		mWebView.goBack();}
+		else{
 		super.onBackPressed();
+		//System.exit(1);
+		}
 	}
-	private String readFromFile() {
+	private String readFromFile(String mFileName) {
 
 	    String ret = "";
 
 	    try {
-	        InputStream inputStream = openFileInput("config.txt");
+	        InputStream inputStream = openFileInput(mFileName);
 
 	        if ( inputStream != null ) {
 	            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -200,5 +216,16 @@ public class MainActivity extends SherlockActivity {
 	        bmImage.setImageBitmap(result);
 	    }
 	}*/
+	public void writeToFile(String data,String mFileName) {
+	    try {
+	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput(mFileName, Context.MODE_PRIVATE));
+	        outputStreamWriter.write(data);
+	        outputStreamWriter.close();
+	    }
+	    catch (IOException e) {
+	        Log.e("Exception", "File write failed: " + e.toString());
+	        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+	    } 
+	}
 
 }
