@@ -42,12 +42,12 @@ public class MainActivity extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		String flag_login_page=readFromFile("prefrence.txt");
-		Log.d("FileCheck", flag_login_page);
-		if(flag_login_page.equals("")){
-		Intent logintest=new Intent(this,LoginPage.class);
-		startActivity(logintest);
-		writeToFile("1","prefrence.txt");
-		}
+		//Log.d("FileCheck", flag_login_page);
+		//if(flag_login_page.equals("")){
+		//Intent logintest=new Intent(this,LoginPage.class);
+		//startActivity(logintest);
+		//writeToFile("1","prefrence.txt");
+		//}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//Setting Views
