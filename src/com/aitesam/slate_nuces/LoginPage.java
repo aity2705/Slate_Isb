@@ -89,8 +89,8 @@ public class LoginPage extends Activity  {
 	        nameValuePairs.add(new BasicNameValuePair("flags", "0")); 
 	        nameValuePairs.add(new BasicNameValuePair("forcedownlevel", "0"));    
 	        nameValuePairs.add(new BasicNameValuePair("formdir", "9"));
-	        nameValuePairs.add(new BasicNameValuePair("eid", "i120515"));//mRollNumber  
-	        nameValuePairs.add(new BasicNameValuePair("pw", "password123"));//mPass  
+	        //nameValuePairs.add(new BasicNameValuePair("eid", "i1215"));//mRollNumber  
+	        //nameValuePairs.add(new BasicNameValuePair("pw", "word123"));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("eid", mRollNumber));//mRollNumber  
 	        nameValuePairs.add(new BasicNameValuePair("pw", mPass));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("trusted", "1"));
