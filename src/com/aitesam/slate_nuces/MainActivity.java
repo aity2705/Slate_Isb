@@ -15,10 +15,14 @@ import com.navdrawer.SimpleSideDrawer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +31,9 @@ import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,19 +45,56 @@ public class MainActivity extends SherlockActivity {
 	private String mCookies;
 	public WebView web_test;
 	public int a=0;
+	// Declare Variable
+		DrawerLayout mDrawerLayout;
+		ListView mDrawerList;
+		ActionBarDrawerToggle mDrawerToggle;
+		MenuListAdapter mMenuAdapter;
+		String[] title;
+		String[] subtitle;
+		WebView as;
+		int[] icon;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		String flag_login_page=readFromFile("prefrence.txt");
 		//Log.d("FileCheck", flag_login_page);
-		//if(flag_login_page.equals("")){
-		//Intent logintest=new Intent(this,LoginPage.class);
-		//startActivity(logintest);
-		//writeToFile("1","prefrence.txt");
-		//}
+		if(flag_login_page.equals("1")){
+		Intent logintest=new Intent(this,LoginPage.class);
+		startActivity(logintest);
+		writeToFile("1","prefrence.txt");
+		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//Setting Views
 		final ActionBar ab = getSupportActionBar();
+		// Generate title
+		title = new String[] { "Home", "Annoucments",
+				"Resources","Recent" };
+		// Generate subtitle
+		subtitle = new String[] { "i120515", "No New Annoucments",
+						"15 Gb" ,"Recent"};
+
+		// Generate icon
+		icon = new int[] { R.drawable.action_about, R.drawable.action_settings,
+				R.drawable.collections_cloud,R.drawable.collections_cloud };
+		// Locate DrawerLayout in drawer_main.xml
+				mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+				// Locate ListView in drawer_main.xml
+				mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+				// Set a custom shadow that overlays the main content when the drawer
+				// opens
+				mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+						GravityCompat.START);
+
+				// Pass results to MenuListAdapter Class
+				mMenuAdapter = new MenuListAdapter(this, title, subtitle, icon);
+
+				// Set the MenuListAdapter to the ListView
+				mDrawerList.setAdapter(mMenuAdapter);
+				mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
 		ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayUseLogoEnabled(false);
 		mWebView=(WebView)findViewById(R.id.web_frag);
@@ -93,6 +136,27 @@ public class MainActivity extends SherlockActivity {
 	        cookieManager.setCookie("http://www.slateisb.nu.edu.pk", mCookies);
 	     // Loading the WebView
 	        mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");
+	    	mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+					R.drawable.ic_drawer, R.string.drawer_open,
+					R.string.drawer_close) {
+
+				public void onDrawerClosed(View view) {
+					// TODO Auto-generated method stub
+					super.onDrawerClosed(view);
+				}
+
+				public void onDrawerOpened(View drawerView) {
+					// TODO Auto-generated method stub
+					super.onDrawerOpened(drawerView);
+				}
+			};
+
+			mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+			if (savedInstanceState == null) {
+				Log.d("Testing", "Clicked Ok");
+				selectItem(2);
+			}
 	        
 	}
 	@Override
@@ -119,30 +183,17 @@ public class MainActivity extends SherlockActivity {
 }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-        case android.R.id.home:
-            // TODO handle clicking the app icon/logo
-        	mNav.toggleLeftDrawer();
-        	findViewById(R.id.behind_btn).setOnClickListener(new OnClickListener()
-            {
-            	@Override
-            	public void onClick(View v){
-        //    		
-            		//Toast.makeText(this, "asdasd", Toast.LENGTH_LONG);
-            		web_test=(WebView)findViewById(R.id.webView1);
-            		web_test.loadUrl("http://www.google.com");
-            	}
-            	
-            });
-            return true;
-        case R.id.menu_refresh:
-        	//showDropDownNav();
-            // switch to a progress animation
-           
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-    	}
+
+		if (item.getItemId() == android.R.id.home) {
+
+			if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+				mDrawerLayout.closeDrawer(mDrawerList);
+			} else {
+				mDrawerLayout.openDrawer(mDrawerList);
+			}
+		}
+
+		return super.onOptionsItemSelected(item);
 		
     }
     private void showDropDownNav() {
@@ -235,5 +286,54 @@ public class MainActivity extends SherlockActivity {
 	        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
 	    } 
 	}
+	// The click listener for ListView in the navigation drawer
+		private class DrawerItemClickListener implements
+				ListView.OnItemClickListener {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				selectItem(position);
+			}
+		}
+
+		private void selectItem(int position) {
+
+			//FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			//as=(WebView)findViewById(R.id.content_frame);
+			//as.setWebViewClient(new WebViewClient());
+			// Locate Position
+			String as="";
+			switch (position) {
+			case 0:
+				as="http://www.google.com";
+				break;
+			case 1:
+				as="http://www.facebook.com";
+				
+				break;
+			case 2:
+				as="http://www.slateisb.nu.edu.pk/portal";
+				break;
+			}
+			mWebView.loadUrl(as);
+			Log.d("Testing", "Clicked Ok");
+			mDrawerList.setItemChecked(position, true);
+			// Close drawer
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
+
+		@Override
+		protected void onPostCreate(Bundle savedInstanceState) {
+			super.onPostCreate(savedInstanceState);
+			// Sync the toggle state after onRestoreInstanceState has occurred.
+			mDrawerToggle.syncState();
+		}
+
+		@Override
+		public void onConfigurationChanged(Configuration newConfig) {
+			super.onConfigurationChanged(newConfig);
+			// Pass any configuration change to the drawer toggles
+			mDrawerToggle.onConfigurationChanged(newConfig);
+		}
 
 }

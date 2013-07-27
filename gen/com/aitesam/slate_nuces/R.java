@@ -855,17 +855,17 @@ containing a value of this type.
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
         public static final int action_settings=0x7f040036;
-        public static final int behind_btn=0x7f04002c;
+        public static final int behind_btn=0x7f04002e;
         public static final int btn_login=0x7f04002a;
-        public static final int content_frame=0x7f040033;
+        public static final int content_frame=0x7f040034;
         public static final int details=0x7f040035;
         public static final int disableHome=0x7f040009;
-        public static final int drawer_layout=0x7f040032;
+        public static final int drawer_layout=0x7f04002b;
         public static final int eid=0x7f040027;
         public static final int homeAsUp=0x7f040006;
-        public static final int icon=0x7f04002f;
-        public static final int imageView1=0x7f04002d;
-        public static final int left_drawer=0x7f040034;
+        public static final int icon=0x7f040031;
+        public static final int imageView1=0x7f04002f;
+        public static final int left_drawer=0x7f04002d;
         public static final int listMode=0x7f040002;
         public static final int logo=0x7f040028;
         public static final int menu_bak=0x7f040042;
@@ -888,12 +888,12 @@ containing a value of this type.
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
-        public static final int subtitle=0x7f040031;
+        public static final int subtitle=0x7f040033;
         public static final int tabMode=0x7f040003;
-        public static final int title=0x7f040030;
+        public static final int title=0x7f040032;
         public static final int useLogo=0x7f040004;
-        public static final int webView1=0x7f04002e;
-        public static final int web_frag=0x7f04002b;
+        public static final int webView1=0x7f040030;
+        public static final int web_frag=0x7f04002c;
         public static final int wrap_content=0x7f040000;
     }
     public static final class integer {

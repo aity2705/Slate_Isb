@@ -1,5 +1,6 @@
 package com.aitesam.slate_nuces;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class LoginPage extends Activity  {
 	// Static Variabel for Multi Classes
 	public  String mRollNumber;
 	public  String mPass;
+	public int login_pass;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,8 +91,6 @@ public class LoginPage extends Activity  {
 	        nameValuePairs.add(new BasicNameValuePair("flags", "0")); 
 	        nameValuePairs.add(new BasicNameValuePair("forcedownlevel", "0"));    
 	        nameValuePairs.add(new BasicNameValuePair("formdir", "9"));
-	        //nameValuePairs.add(new BasicNameValuePair("eid", "i1215"));//mRollNumber  
-	        //nameValuePairs.add(new BasicNameValuePair("pw", "word123"));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("eid", mRollNumber));//mRollNumber  
 	        nameValuePairs.add(new BasicNameValuePair("pw", mPass));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("trusted", "1"));
@@ -110,7 +110,11 @@ public class LoginPage extends Activity  {
 	            int SDK_INT = android.os.Build.VERSION.SDK_INT;
 	            String rs=Integer.toString(SDK_INT,10);
 	            Log.d("sdk",rs);
-	            
+	            ByteArrayOutputStream out = new ByteArrayOutputStream();
+		        response.getEntity().writeTo(out);
+		        out.close();
+		        String responseString = out.toString();
+	            login_pass=responseString.indexOf("alertMessage");
 	        } catch (Exception e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
@@ -140,7 +144,14 @@ public class LoginPage extends Activity  {
 		protected void onPostExecute(String result){
 			writeToFile(result,"config.txt");
 			//ab.setText(result);
-		finish();
+			Log.d("Login Pass",String.valueOf(login_pass));
+			if((login_pass==-1)){
+				finish();
+				
+			}
+			else{
+				Toast.makeText(getApplicationContext(), "Login Failed Please Try Again", Toast.LENGTH_LONG).show();
+		}
 			//System.exit(1);
 			//Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
 			//startActivity(mMainIntent);
