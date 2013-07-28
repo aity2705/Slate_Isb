@@ -1,11 +1,19 @@
 package com.aitesam.slate_nuces;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -15,6 +23,8 @@ import com.navdrawer.SimpleSideDrawer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,6 +44,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,25 +65,46 @@ public class MainActivity extends SherlockActivity {
 		String[] subtitle;
 		WebView as;
 		int[] icon;
+		Intent srvIntent = new Intent();
+		RelativeLayout badgeLayout;
+		TextView tv;
+       // srvIntent.setClass(this, ServiceClass.class);
+		SharedPreferences mSharedPreferences;
+        
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		String flag_login_page=readFromFile("prefrence.txt");
+		/*String flag_login_page=readFromFile("prefrence.txt");
 		//Log.d("FileCheck", flag_login_page);
 		if(flag_login_page.equals("1")){
 		Intent logintest=new Intent(this,LoginPage.class);
 		startActivity(logintest);
 		writeToFile("1","prefrence.txt");
-		}
+		}*/
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//Setting Views
 		final ActionBar ab = getSupportActionBar();
+		mSharedPreferences = getSharedPreferences("com.slateisb.android.aitesam",Context.MODE_PRIVATE);
+		String flag_time="0";
+		flag_time=mSharedPreferences.getString("FirstTime", "");
+		Log.d("Time",flag_time);
+		if(flag_time.equals("1")){
+			srvIntent.setClass(this, ServiceClass.class);
+			Log.d("Time",flag_time);
+	        this.startService(srvIntent);
+	        try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// Generate title
 		title = new String[] { "Home", "Annoucments",
-				"Resources","Recent" };
+				"Logout","Recent" };
 		// Generate subtitle
 		subtitle = new String[] { "i120515", "No New Annoucments",
-						"15 Gb" ,"Recent"};
+						"Stop Service" ,"Recent"};
 
 		// Generate icon
 		icon = new int[] { R.drawable.action_about, R.drawable.action_settings,
@@ -123,17 +155,47 @@ public class MainActivity extends SherlockActivity {
             public void onPageFinished(WebView view, String url) {
             	 view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#pda-footer').hide();});");
             	view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#pda-portlet-menu').hide();});");
+            	/*HttpClient mHttpClient=new DefaultHttpClient();
+	    		try {
+	    			HttpResponse mResponse=mHttpClient.execute(new HttpGet("http://www.slateisb.nu.edu.pk/portal/pda"));
+	    			StatusLine mStatusLine=mResponse.getStatusLine();
+	    			Log.d("Http Status code", String.valueOf(mStatusLine.getStatusCode()));
+	    			ByteArrayOutputStream out = new ByteArrayOutputStream();
+	    	        mResponse.getEntity().writeTo(out);
+	    	        out.close();
+	    	        String responseString = out.toString();
+	    	        int i=responseString.indexOf("Message");
+	    	        int j=responseString.indexOf("Aitesam");
+	    	        //boolean k=responseString.matches(".*\\bMessage\\b.*");
+	    	        //String pref=PreferenceManager.getDefaultSharedPreferences(this).getString("firstPlayerNameSave", "");
+	    	        //boolean k=Arrays.asList(responseString.split("\n")).contains("Message");
+	    	       // String sc=responseString.substring(i,j+1);
+	    	        Log.d("Result", responseString);
+	    	        
+	    	        //writeToFile(responseString,"Result.txt");
+	    		} catch (ClientProtocolException e1) {
+	    			// TODO Auto-generated catch block
+	    			Log.d("Http Exeption",e1.toString());
+	    			e1.printStackTrace();
+	    		} catch (IOException e1) {
+	    			// TODO Auto-generated catch block
+	    			Log.d("Http Exeption",e1.toString());
+	    			e1.printStackTrace();
+	    		}*/
+	    	
             }
 
         });
+        
+        String mCookie=mSharedPreferences.getString("cookie", "");
 		//Setting Up Cookies
-        mCookies=readFromFile("config.txt");
-        Log.d("Cookie_Read", mCookies);//For Debugging
+        mCookies=readFromFile("config1.txt");
+        Log.d("Cookie_Read_Preference", mCookie);//For Debugging
         CookieSyncManager.createInstance(this);
 	       CookieManager cookieManager = CookieManager.getInstance();
 	       cookieManager.removeAllCookie();
-	        //cookieManager.setAcceptCookie(true);
-	        cookieManager.setCookie("http://www.slateisb.nu.edu.pk", mCookies);
+	        cookieManager.setAcceptCookie(true);
+	        cookieManager.setCookie("http://www.slateisb.nu.edu.pk", mCookie);
 	     // Loading the WebView
 	        mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");
 	    	mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -179,13 +241,18 @@ public class MainActivity extends SherlockActivity {
                
             }
         });*/
+        String mNotificationCount=mSharedPreferences.getString("NotificationCount", "");
+        badgeLayout = (RelativeLayout) menu.findItem(R.id.badge).getActionView();
+        tv = (TextView) badgeLayout.findViewById(R.id.actionbar_notifcation_textview); tv.setText("12");
+       tv.setText(mNotificationCount);
         return super.onCreateOptionsMenu(menu);
 }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
 		if (item.getItemId() == android.R.id.home) {
-
+			String mNotificationCount=mSharedPreferences.getString("NotificationCount", "");
+			tv.setText(mNotificationCount);
 			if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
 				mDrawerLayout.closeDrawer(mDrawerList);
 			} else {
@@ -209,7 +276,11 @@ public class MainActivity extends SherlockActivity {
 		mWebView.goBack();}
 		else{
 		super.onBackPressed();
-		//System.exit(1);
+		//Intent srvIntent = new Intent();
+        srvIntent.setClass(this, ServiceClass.class);
+        this.startService(srvIntent);
+        super.finish();
+		System.exit(1);
 		}
 	}
 	private String readFromFile(String mFileName) {
@@ -308,14 +379,19 @@ public class MainActivity extends SherlockActivity {
 				as="http://www.google.com";
 				break;
 			case 1:
-				as="http://www.facebook.com";
+				srvIntent.setClass(this, ServiceClass.class);
+		        this.stopService(srvIntent);
+				
+				//as="http://www.facebook.com";
 				
 				break;
 			case 2:
-				as="http://www.slateisb.nu.edu.pk/portal";
+				srvIntent.setClass(this, ServiceClass.class);
+		        this.stopService(srvIntent);
+				
 				break;
 			}
-			mWebView.loadUrl(as);
+			//mWebView.loadUrl(as);
 			Log.d("Testing", "Clicked Ok");
 			mDrawerList.setItemChecked(position, true);
 			// Close drawer

@@ -19,7 +19,6 @@ import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
-
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -29,7 +28,6 @@ import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.View;
@@ -38,55 +36,31 @@ import android.webkit.CookieSyncManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-//@SuppressLint("NewApi")
-public class LoginPage extends Activity  {
+public class LoginServic extends Activity  {
 	// UI Objects
-	EditText mUid;
-	EditText mPassword;
-	ImageButton mLoginButton;
+	
 	//Http Objects
 	private HttpClient httpClient = new DefaultHttpClient();
 	public Cookie cookie = null;
 	public  String cookies2;
 	public  String cookieString;
-	public String testa;
 	private static final int TIMEOUT_MS = 3000;
 	private static final String redirURL = "http://slateisb.nu.edu.pk/portal/relogin";
 	// Static Variabel for Multi Classes
-	public  String mRollNumber;
-	public  String mPass;
 	public int login_pass;
 	public Editor mSetting;
 	public Editor preferenceEditor;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login_page);
+		//setContentView(R.layout.activity_login_page);
 		//Setting View of UI
-		mUid=(EditText)findViewById(R.id.eid);
-		mPassword=(EditText)findViewById(R.id.pw);
-		mLoginButton=(ImageButton)findViewById(R.id.btn_login);
 		mSetting = PreferenceManager.getDefaultSharedPreferences(this).edit();
-		preferenceEditor = getSharedPreferences("com.slateisb.android.aitesam",MODE_PRIVATE).edit();
+		preferenceEditor = getSharedPreferences("com.mycompany.android.myapp",MODE_PRIVATE).edit();
 		Config.test_web="abc";
-		mLoginButton.setOnClickListener(new View.OnClickListener() {
 			
-			@Override
-			public void onClick(View v) {
 				if(isNetworkAvailable()){
 				//First Setting  Keys
-				mRollNumber=mUid.getText().toString();
-				mPass=mPassword.getText().toString();
-				preferenceEditor.putString("uid", mUid.getText().toString());
-				preferenceEditor.putString("pwd", mPassword.getText().toString());
-				preferenceEditor.putString("LoginCheck", "1");
-				preferenceEditor.putString("FirstTime", "0");
-				preferenceEditor.commit();
-				SharedPreferences mSharedPreferences = getSharedPreferences("com.slateisb.android.aitesam",Context.MODE_PRIVATE);
-		    	String Activity_flag=mSharedPreferences.getString("uid", "");
-		    	Log.d("TestPreference", Activity_flag);
-		    	
-				
 				do_login mLogin=new do_login();
 				mLogin.execute();
 				Toast.makeText(getApplicationContext(), "Logging In...", Toast.LENGTH_SHORT).show();
@@ -94,8 +68,7 @@ public class LoginPage extends Activity  {
 				else{
 					Toast.makeText(getApplicationContext(), "No Network", Toast.LENGTH_SHORT).show();
 				}
-			}
-		});
+		
 	}
 	private class do_login extends AsyncTask<String,Void,String>{
 
@@ -110,14 +83,14 @@ public class LoginPage extends Activity  {
 	        nameValuePairs.add(new BasicNameValuePair("flags", "0")); 
 	        nameValuePairs.add(new BasicNameValuePair("forcedownlevel", "0"));    
 	        nameValuePairs.add(new BasicNameValuePair("formdir", "9"));
-	        nameValuePairs.add(new BasicNameValuePair("eid", mRollNumber));//mRollNumber  
-	        nameValuePairs.add(new BasicNameValuePair("pw", mPass));//mPass  
+	        nameValuePairs.add(new BasicNameValuePair("eid", "i120515"));//mRollNumber  
+	        nameValuePairs.add(new BasicNameValuePair("pw","password123"));//mPass  
 	        nameValuePairs.add(new BasicNameValuePair("trusted", "1"));
 	        HttpResponse end = null;
 	        try {
 	            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 	            HttpResponse response = httpClient.execute(httpPost);
-	            HttpResponse tResponse=httpClient.execute(new HttpGet("http://slateisb.nu.edu.pk/portal/pda/~"+mRollNumber+"/tool/fe9a4b7a-6ed7-4324-8a6b-8e35d612dd25"));
+	            HttpResponse tResponse=httpClient.execute(new HttpGet("http://slateisb.nu.edu.pk/portal/pda/~"+"i120515"+"/tool/fe9a4b7a-6ed7-4324-8a6b-8e35d612dd25"));
 	            StatusLine mStatusLine=tResponse.getStatusLine();
     			Log.d("Http Status code", String.valueOf(mStatusLine.getStatusCode()));
     			ByteArrayOutputStream out2 = new ByteArrayOutputStream();
@@ -126,8 +99,7 @@ public class LoginPage extends Activity  {
     	        String responseStr = out2.toString();
     	        //String responseString2=responseStr.replaceFirst("View announcement", "");
     	        int number=anucount(responseStr);
-    	        preferenceEditor.putString("NotificationCount", String.valueOf(number));
-				preferenceEditor.commit();
+    	        
     	        Log.d("PageResult", String.valueOf(number));
 	          //After Login
 	            List<Cookie> cookies = ((AbstractHttpClient) httpClient).getCookieStore().getCookies();
@@ -157,7 +129,7 @@ public class LoginPage extends Activity  {
 	        List<Cookie> cookies = Config.mCookies;
 	        if (cookies != null && !cookies.isEmpty()) {
 
-	            CookieSyncManager.createInstance(LoginPage.this);
+	            CookieSyncManager.createInstance(LoginServic.this);
 	            CookieManager cookieManager = CookieManager.getInstance();
 	            for (Cookie cookie : cookies) {
 
@@ -206,13 +178,13 @@ public class LoginPage extends Activity  {
 			//ab.setText(result);
 			Log.d("Login Pass",String.valueOf(login_pass));
 			if((login_pass==-1)){
-				Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
+				Intent mMainIntent= new Intent(LoginServic.this,MainActivity.class);
 				startActivity(mMainIntent);
 				finish();
 				
 			}
 			else{
-				Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
+				Intent mMainIntent= new Intent(LoginServic.this,MainActivity.class);
 				startActivity(mMainIntent);
 				finish();
 				

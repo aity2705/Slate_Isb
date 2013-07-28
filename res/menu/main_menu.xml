@@ -19,7 +19,14 @@
 	<!-- custom -->
 	<item android:id="@+id/menu_search" android:showAsAction="ifRoom"
 		android:title="@string/action_label_search" android:actionViewClass="android.widget.SearchView" />
-
+	<!-- Notification -->
+	<item
+        android:id="@+id/badge"
+        android:actionLayout="@layout/notify_button"
+        android:icon="@drawable/ic_stat_android"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_label_refresh">
+    </item>
 	<!-- icon -->
 	<item android:id="@+id/menu_refresh" android:showAsAction="ifRoom"
 		android:title="@string/action_label_refresh" android:icon="@drawable/ic_menu_refresh_holo_light" />
