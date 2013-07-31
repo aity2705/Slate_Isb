@@ -1,7 +1,6 @@
 package com.aitesam.slate_nuces;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,19 +9,11 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.aitesam.slate_nuces.LoginPage.do_login;
 import com.navdrawer.SimpleSideDrawer;
 
 import android.content.Context;
@@ -32,17 +23,13 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
@@ -92,9 +79,9 @@ public class MainActivity extends SherlockActivity {
 		mWebView=(WebView)findViewById(R.id.web_frag);
 		mNav= new SimpleSideDrawer(this);
 		mNav.setLeftBehindContentView(R.layout.left_drawer_test);
-		boolean mNetworkAvailable=isNetworkAvailable();
+		//boolean mNetworkAvailable=isNetworkAvailable();
 		setTitle("");
-		Log.d("Network Check", String.valueOf(mNetworkAvailable));
+		//Log.d("Network Check", String.valueOf(mNetworkAvailable));
 		mSharedPreferences = getSharedPreferences("com.slateisb.android.aitesam",Context.MODE_PRIVATE);
 		mPrefernceEditor1 = getSharedPreferences("com.slateisb.android.aitesam",MODE_PRIVATE).edit();
 		String flag_time="0";
@@ -173,17 +160,17 @@ public class MainActivity extends SherlockActivity {
 	        cookieManager.setCookie("http://www.slateisb.nu.edu.pk", mCookie);
 	     // Loading the WebView
 	        //
-	        if(mNetworkAvailable){
+	        if(isNetworkAvailable()){
 	        	mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");
 	        }
 	        else{
 	        	 ab.hide();
 	        	mWebView.loadUrl("file:///android_asset/index2.html");
 	        }
-	        ImageView imageView=(ImageView)findViewById(R.id.imageView1);
+	        /*ImageView imageView=(ImageView)findViewById(R.id.imageView1);
 			
 			try {
-				URL url = new URL("http://slateisb.nu.edu.pk/portal/tool/6d2f8659-b136-47e0-b944-fe00f1555a6e/?wicket:bookmarkablePage=:org.sakaiproject.profile2.tool.pages.MyProfile&wicket:interface=:1:photo::IResourceListener::");
+				URL url = new URL("https://i3.sndcdn.com/artworks-000054229283-bh03nh-t120x120.jpg?5ffe3cd");
 				Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 				imageView.setImageBitmap(bmp);
 
@@ -195,7 +182,7 @@ public class MainActivity extends SherlockActivity {
 				// TODO Auto-generated catch block
 				Log.d("Error During Image Load", e.toString());
 				e.printStackTrace();
-			}
+			}*/
 	        	        
 	}
 	@Override
@@ -387,7 +374,7 @@ public class MainActivity extends SherlockActivity {
 	String as="";
 	switch (position) {
 	case 0:
-		mWebView.loadUrl("http://fuji.h1de.net/browse.php?u=czovL20uZmFjZWJvb2suY29tLw%3D%3D&b=0&f=norefer");
+		mWebView.loadUrl("http://www.adfreeproxy.com/browse.php?u=https%3A%2F%2Fm.facebook.com%2F%3F_rdr&b=4");
 		Toast.makeText(this, "App Clicked", Toast.LENGTH_SHORT).show();
 		break;
 	}
