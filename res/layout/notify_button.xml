@@ -18,6 +18,6 @@
    android:layout_width="48dp"
         android:layout_height="fill_parent"
         android:clickable="true"
-        android:src="@drawable/btn_radio_off_holo_light" />
+        android:src="@drawable/btn_check_off_holo_light" />
 
 </RelativeLayout>

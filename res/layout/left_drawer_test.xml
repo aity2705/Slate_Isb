@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="#646D7E" >
+
+<LinearLayout
+    android:layout_width="200dp"
+    android:layout_height="436dp"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp" >
+
+       <!--  <TextView
+            android:id="@+id/actionbar_notifcation_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:padding="12dp"
+            android:text="EE"
+            android:textColor="#111111" />
+             -->
+        <TextView android:id="@+id/Test2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:padding="12dp"
+            android:text="i120515"/>
+
+         <ImageView
+             android:id="@+id/imageView1"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             
+             android:src="@drawable/ic_launcher" />
+
+    </RelativeLayout>
+
+  	     <ListView
+            android:id="@+id/drawer_list"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" >
+        </ListView>
+        <LinearLayout android:layout_width="200dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+        <TextView 
+		  android:id="@+id/myTitle2" 
+		  android:text="Daily Quote:" 
+		  android:layout_width="fill_parent" 
+		  android:layout_height="20dp" 
+		  android:textColor="#000000"
+		  android:gravity="left"
+		  android:background="@drawable/header"
+		   />
+        <TextView 
+		  android:id="@+id/quote" 
+		  android:text="Dont Let The World Change Your Smile,
+		  Let Your Smile Change The World.." 
+		  android:layout_width="wrap_content" 
+		  android:layout_height="wrap_content" 
+		  android:textColor="#ADA96E"
+		   />
+     
+        </LinearLayout>
+        <TextView 
+		  android:id="@+id/myTitle3" 
+		  android:text="Apps" 
+		  android:layout_width="fill_parent" 
+		  android:layout_height="20dp" 
+		  android:textColor="#000000"
+		  android:gravity="left"
+		  android:background="@drawable/header"
+		   />
+        <ListView
+            android:id="@+id/drawer_list2"
+            android:layout_width="match_parent"
+            android:layout_height="72dp" >
+        </ListView>
+       </LinearLayout>
+</ScrollView>

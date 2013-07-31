@@ -97,7 +97,7 @@ public class LoginPage extends Activity  {
 			}
 		});
 	}
-	private class do_login extends AsyncTask<String,Void,String>{
+	public class do_login extends AsyncTask<String,Void,String>{
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -223,7 +223,7 @@ public class LoginPage extends Activity  {
 			//startActivity(mMainIntent);
 		}
 	}
-	private boolean isNetworkAvailable() {
+	public boolean isNetworkAvailable() {
 	    ConnectivityManager connectivityManager 
 	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

@@ -25,9 +25,10 @@ public class Test extends BroadcastReceiver {
         Log.d("status", String.valueOf(test));
         if(test){
         	context.startService(srvIntent);
-        	Toast.makeText(context, "Network Connected", Toast.LENGTH_LONG).show();
+        	Toast.makeText(context, "Nuces Service Started", Toast.LENGTH_LONG).show();
         }
         else{
+        	Toast.makeText(context, "Nuces Service Stopped", Toast.LENGTH_LONG).show();
         	preferenceEditor.putString("FirstTime", "1");
         	context.stopService(srvIntent);
         }

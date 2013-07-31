@@ -804,27 +804,40 @@ containing a value of this type.
         public static final int ad_tab_selected_holo=0x7f02005f;
         public static final int ad_tab_selected_pressed_holo=0x7f020060;
         public static final int ad_tab_unselected_holo=0x7f020061;
-        public static final int btn_check_off_holo_light=0x7f020062;
-        public static final int btn_check_on_holo_light=0x7f020063;
-        public static final int btn_radio_off_holo_light=0x7f020064;
-        public static final int btn_radio_on_holo_light=0x7f020065;
-        public static final int collections_cloud=0x7f020066;
-        public static final int drawer_shadow=0x7f020067;
-        public static final int fast_logo=0x7f020068;
-        public static final int fast_logo_s=0x7f020069;
-        public static final int ic_action_search=0x7f02006a;
-        public static final int ic_drawer=0x7f02006b;
-        public static final int ic_launcher=0x7f02006c;
-        public static final int ic_menu_refresh_holo_light=0x7f02006d;
-        public static final int ic_menu_star_holo_light=0x7f02006e;
-        public static final int ic_stat_android=0x7f02006f;
-        public static final int icon=0x7f020070;
-        public static final int login_background=0x7f020071;
-        public static final int login_button_s=0x7f020072;
-        public static final int spinner_default_holo_light=0x7f020073;
-        public static final int spinner_disabled_holo_light=0x7f020074;
+        public static final int alert=0x7f020062;
+        public static final int btn_check_off_holo_light=0x7f020063;
+        public static final int btn_check_on_holo_light=0x7f020064;
+        public static final int btn_radio_off_holo_light=0x7f020065;
+        public static final int btn_radio_on_holo_light=0x7f020066;
+        public static final int collections_cloud=0x7f020067;
+        public static final int drawer_shadow=0x7f020068;
+        public static final int fast_logo=0x7f020069;
+        public static final int fast_logo_s=0x7f02006a;
+        public static final int header=0x7f02006b;
+        public static final int ic_account=0x7f02006c;
+        public static final int ic_action_search=0x7f02006d;
+        public static final int ic_box=0x7f02006e;
+        public static final int ic_drawer=0x7f02006f;
+        public static final int ic_facebook=0x7f020070;
+        public static final int ic_home1=0x7f020071;
+        public static final int ic_launcher=0x7f020072;
+        public static final int ic_menu_refresh_holo_light=0x7f020073;
+        public static final int ic_menu_star_holo_light=0x7f020074;
+        public static final int ic_messages=0x7f020075;
+        public static final int ic_profile=0x7f020076;
+        public static final int ic_report=0x7f020077;
+        public static final int ic_settings=0x7f020078;
+        public static final int ic_setup=0x7f020079;
+        public static final int ic_stat_android=0x7f02007a;
+        public static final int icon=0x7f02007b;
+        public static final int list1=0x7f02007c;
+        public static final int login_background=0x7f02007d;
+        public static final int login_button_s=0x7f02007e;
+        public static final int spinner_default_holo_light=0x7f02007f;
+        public static final int spinner_disabled_holo_light=0x7f020080;
     }
     public static final class id {
+        public static final int Test2=0x7f040035;
         public static final int abs__action_bar=0x7f040022;
         public static final int abs__action_bar_container=0x7f040021;
         public static final int abs__action_bar_subtitle=0x7f040011;
@@ -854,15 +867,17 @@ containing a value of this type.
         public static final int abs__title=0x7f04001b;
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
-        public static final int action_settings=0x7f040037;
-        public static final int actionbar_notifcation_textview=0x7f040036;
-        public static final int badge=0x7f040039;
+        public static final int action_settings=0x7f04003c;
+        public static final int actionbar_notifcation_textview=0x7f04003b;
+        public static final int badge=0x7f04003d;
         public static final int behind_btn=0x7f04002e;
         public static final int btn_login=0x7f04002a;
-        public static final int content_frame=0x7f040034;
-        public static final int details=0x7f040035;
+        public static final int content_frame=0x7f040033;
+        public static final int details=0x7f040034;
         public static final int disableHome=0x7f040009;
         public static final int drawer_layout=0x7f04002b;
+        public static final int drawer_list=0x7f040036;
+        public static final int drawer_list2=0x7f04003a;
         public static final int eid=0x7f040027;
         public static final int homeAsUp=0x7f040006;
         public static final int icon=0x7f040031;
@@ -870,27 +885,16 @@ containing a value of this type.
         public static final int left_drawer=0x7f04002d;
         public static final int listMode=0x7f040002;
         public static final int logo=0x7f040028;
-        public static final int menu_bak=0x7f040044;
-        public static final int menu_bak_gradient=0x7f040047;
-        public static final int menu_bak_group=0x7f040045;
-        public static final int menu_bak_none=0x7f040046;
-        public static final int menu_both=0x7f04003b;
-        public static final int menu_logo=0x7f04003d;
-        public static final int menu_nav=0x7f04003f;
-        public static final int menu_nav_drop_down=0x7f040042;
-        public static final int menu_nav_group=0x7f040040;
-        public static final int menu_nav_label=0x7f040043;
-        public static final int menu_nav_tabs=0x7f040041;
-        public static final int menu_refresh=0x7f04003a;
-        public static final int menu_search=0x7f040038;
-        public static final int menu_text=0x7f04003c;
-        public static final int menu_up=0x7f04003e;
+        public static final int menu_refresh=0x7f04003e;
+        public static final int menu_up=0x7f04003f;
+        public static final int myTitle2=0x7f040037;
+        public static final int myTitle3=0x7f040039;
         public static final int normal=0x7f040001;
         public static final int pw=0x7f040029;
+        public static final int quote=0x7f040038;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
-        public static final int subtitle=0x7f040033;
         public static final int tabMode=0x7f040003;
         public static final int title=0x7f040032;
         public static final int useLogo=0x7f040004;
@@ -925,12 +929,14 @@ containing a value of this type.
         public static final int activity_login_page=0x7f030014;
         public static final int activity_main=0x7f030015;
         public static final int drawer_layout=0x7f030016;
-        public static final int drawer_list_item=0x7f030017;
-        public static final int drawer_main=0x7f030018;
-        public static final int fragment1=0x7f030019;
-        public static final int notify_button=0x7f03001a;
-        public static final int sherlock_spinner_dropdown_item=0x7f03001b;
-        public static final int sherlock_spinner_item=0x7f03001c;
+        public static final int drawer_list_item_apps=0x7f030017;
+        public static final int drawer_list_item_test=0x7f030018;
+        public static final int drawer_main=0x7f030019;
+        public static final int fragment1=0x7f03001a;
+        public static final int left_drawer_test=0x7f03001b;
+        public static final int notify_button=0x7f03001c;
+        public static final int sherlock_spinner_dropdown_item=0x7f03001d;
+        public static final int sherlock_spinner_item=0x7f03001e;
     }
     public static final class menu {
         public static final int login_page=0x7f0b0000;
@@ -1017,10 +1023,10 @@ containing a value of this type.
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f0a0059;
+        public static final int AppTheme=0x7f0a005b;
         public static final int DialogWindowTitle_Sherlock=0x7f0a0033;
         public static final int DialogWindowTitle_Sherlock_Light=0x7f0a0034;
-        public static final int MyActionBar=0x7f0a005f;
+        public static final int MyActionBar=0x7f0a0061;
         public static final int Sherlock___TextAppearance_Small=0x7f0a0047;
         public static final int Sherlock___Theme=0x7f0a004a;
         public static final int Sherlock___Theme_DarkActionBar=0x7f0a004c;
@@ -1062,6 +1068,7 @@ containing a value of this type.
         public static final int Theme_Sherlock_Light_ForceOverflow=0x7f0a0054;
         public static final int Theme_Sherlock_Light_NoActionBar=0x7f0a0052;
         public static final int Theme_Sherlock_NoActionBar=0x7f0a0051;
+        public static final int Theme_Styled=0x7f0a0059;
         public static final int Widget=0x7f0a0000;
         public static final int Widget_Sherlock_ActionBar=0x7f0a0002;
         public static final int Widget_Sherlock_ActionBar_Solid=0x7f0a0003;
@@ -1107,11 +1114,12 @@ containing a value of this type.
         public static final int Widget_Sherlock_ProgressBar_Horizontal=0x7f0a0030;
         public static final int Widget_Sherlock_Spinner_DropDown_ActionBar=0x7f0a0024;
         public static final int Widget_Sherlock_TextView_SpinnerItem=0x7f0a0032;
-        public static final int behindMenuItemLabel=0x7f0a005e;
-        public static final int behindMenuItemTitle=0x7f0a005d;
-        public static final int behindMenuScrollContent=0x7f0a005c;
-        public static final int leftBehindMenuScroll=0x7f0a005a;
-        public static final int rightBehindMenuScroll=0x7f0a005b;
+        public static final int Widget_Styled_ActionBar=0x7f0a005a;
+        public static final int behindMenuItemLabel=0x7f0a0060;
+        public static final int behindMenuItemTitle=0x7f0a005f;
+        public static final int behindMenuScrollContent=0x7f0a005e;
+        public static final int leftBehindMenuScroll=0x7f0a005c;
+        public static final int rightBehindMenuScroll=0x7f0a005d;
     }
     public static final class styleable {
         /**  Attributes used to style the Action Bar. 
