@@ -886,6 +886,7 @@ containing a value of this type.
         public static final int left_drawer=0x7f04002d;
         public static final int listMode=0x7f040002;
         public static final int logo=0x7f040028;
+        public static final int menu_about=0x7f040043;
         public static final int menu_refresh=0x7f040041;
         public static final int menu_up=0x7f040042;
         public static final int myTitle2=0x7f040038;

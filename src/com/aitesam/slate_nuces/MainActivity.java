@@ -225,6 +225,36 @@ public class MainActivity extends SherlockActivity {
 				mDrawerLayout.openDrawer(mDrawerList);
 			}*/
 		}
+		if (item.getItemId() == R.id.menu_about) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+	 
+				// set title
+				alertDialogBuilder.setTitle("About");
+	 
+				// set dialog message
+				alertDialogBuilder
+					.setMessage("This Application is in Alpha state.If Error Occurs please Report." +
+							"Application is created By Aitesam Abdul Raheem")
+					.setCancelable(false)
+					.setPositiveButton("Cancle",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							dialog.cancel();
+						}
+					  });
+					
+	 
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+					// show it
+					alertDialog.show();
+			/*if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+				mDrawerLayout.closeDrawer(mDrawerList);
+			} else {
+				mDrawerLayout.openDrawer(mDrawerList);
+			}*/
+		}
 		if(item.getItemId()==R.id.menu_up){
 			mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/?force.logout=yes");
 			Toast.makeText(this, "Logging Out", Toast.LENGTH_SHORT).show();
