@@ -234,8 +234,8 @@ public class MainActivity extends SherlockActivity {
 	 
 				// set dialog message
 				alertDialogBuilder
-					.setMessage("This Application is in Alpha state.If Error Occurs please Report." +
-							"Application is created By Aitesam Abdul Raheem")
+					.setMessage("This Application is in Alpha state.\nIf Error Occurs please Report Using App." +
+							"\nApplication is created By Aitesam Abdul Raheem")
 					.setCancelable(false)
 					.setPositiveButton("Cancle",new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int id) {

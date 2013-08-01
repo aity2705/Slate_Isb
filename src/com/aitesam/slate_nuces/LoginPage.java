@@ -58,18 +58,14 @@ public class LoginPage extends Activity  {
 	// Static Variabel for Multi Classes
 	public  String mRollNumber;
 	public  String mPass;
-	public int login_pass;
+	int login_pass=-1;
 	public Editor mSetting;
 	public Editor preferenceEditor;
-	ActionBar temp;
-	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_page);
 		//Setting View of UI
-		temp=getActionBar();
-		temp.hide();
 		mUid=(EditText)findViewById(R.id.eid);
 		mPassword=(EditText)findViewById(R.id.pw);
 		mLoginButton=(ImageButton)findViewById(R.id.btn_login);
@@ -84,11 +80,6 @@ public class LoginPage extends Activity  {
 				//First Setting  Keys
 				mRollNumber=mUid.getText().toString();
 				mPass=mPassword.getText().toString();
-				preferenceEditor.putString("uid", mUid.getText().toString());
-				preferenceEditor.putString("pwd", mPassword.getText().toString());
-				preferenceEditor.putString("LoginCheck", "1");
-				preferenceEditor.putString("FirstTime", "0");
-				preferenceEditor.commit();
 				SharedPreferences mSharedPreferences = getSharedPreferences("com.slateisb.android.aitesam",Context.MODE_PRIVATE);
 		    	String Activity_flag=mSharedPreferences.getString("uid", "");
 		    	Log.d("TestPreference", Activity_flag);
@@ -131,6 +122,12 @@ public class LoginPage extends Activity  {
     	        tResponse.getEntity().writeTo(out2);
     	        out2.close();
     	        String responseStr = out2.toString();
+    	        ByteArrayOutputStream out = new ByteArrayOutputStream();
+		        response.getEntity().writeTo(out);
+		        out.close();
+		        String responseString = out.toString();
+	            login_pass=responseString.indexOf("Invalid login");
+	            Log.d("Login Response", String.valueOf(login_pass));
     	        //String responseString2=responseStr.replaceFirst("View announcement", "");
     	        int number=anucount(responseStr);
     	        preferenceEditor.putString("NotificationCount", String.valueOf(number));
@@ -149,12 +146,7 @@ public class LoginPage extends Activity  {
 	            int SDK_INT = android.os.Build.VERSION.SDK_INT;
 	            String rs=Integer.toString(SDK_INT,10);
 	            Log.d("sdk",rs);
-	            ByteArrayOutputStream out = new ByteArrayOutputStream();
-		        response.getEntity().writeTo(out);
-		        out.close();
-		        String responseString = out.toString();
-	            login_pass=responseString.indexOf("alertMessage");
-	            Log.d("Login Response", responseString);
+	            
 	        } catch (Exception e) {
 	            // TODO Auto-generated catch block
 	            e.printStackTrace();
@@ -213,17 +205,19 @@ public class LoginPage extends Activity  {
 			//ab.setText(result);
 			Log.d("Login Pass",String.valueOf(login_pass));
 			if((login_pass==-1)){
+				preferenceEditor.putString("uid", mUid.getText().toString());
+				preferenceEditor.putString("pwd", mPassword.getText().toString());
+				preferenceEditor.putString("LoginCheck", "1");
+				preferenceEditor.putString("FirstTime", "0");
+				preferenceEditor.commit();
 				Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
 				startActivity(mMainIntent);
 				finish();
 				
 			}
 			else{
-				Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
-				startActivity(mMainIntent);
-				finish();
 				
-				//Toast.makeText(getApplicationContext(), "Login Failed Please Try Again", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Login Failed Please Try Again", Toast.LENGTH_LONG).show();
 		}
 			//System.exit(1);
 			//Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
