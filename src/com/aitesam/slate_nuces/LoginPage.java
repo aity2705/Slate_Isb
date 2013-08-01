@@ -26,6 +26,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +41,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 //@SuppressLint("NewApi")
+@SuppressLint("NewApi")
 public class LoginPage extends Activity  {
 	// UI Objects
 	EditText mUid;
@@ -58,11 +61,15 @@ public class LoginPage extends Activity  {
 	public int login_pass;
 	public Editor mSetting;
 	public Editor preferenceEditor;
+	ActionBar temp;
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login_page);
 		//Setting View of UI
+		temp=getActionBar();
+		temp.hide();
 		mUid=(EditText)findViewById(R.id.eid);
 		mPassword=(EditText)findViewById(R.id.pw);
 		mLoginButton=(ImageButton)findViewById(R.id.btn_login);

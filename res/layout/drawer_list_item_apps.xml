@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical|left"
@@ -22,17 +22,17 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true" />
+            />
 
-<!--          <TextView
+        <TextView
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
+   			android:text="H"
+   			android:gravity="right"
+   			android:textColor="#111"
            />
-           -->
-    </LinearLayout>
+      
+    </RelativeLayout>
 
 </LinearLayout>

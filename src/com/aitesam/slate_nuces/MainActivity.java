@@ -1,13 +1,8 @@
 package com.aitesam.slate_nuces;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.List;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -15,20 +10,28 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.navdrawer.SimpleSideDrawer;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.PushService;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -36,6 +39,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -47,9 +51,9 @@ public class MainActivity extends SherlockActivity {
 	private SimpleSideDrawer mNav;
 	WebView mWebView;
 	public ImageView test;
-	private String mCookies;
 	public WebView web_test;
 	public int a=0;
+	public List<ParseObject> ob;
 	// Declare Variable
 		DrawerLayout mDrawerLayout;
 		ListView mDrawerList;
@@ -68,24 +72,35 @@ public class MainActivity extends SherlockActivity {
        // srvIntent.setClass(this, ServiceClass.class);
 		SharedPreferences mSharedPreferences;
 		Editor mPrefernceEditor1;
+		TextView mQuote;
+		ActionBar ab;
         
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//Setting Views
-		final ActionBar ab = getSupportActionBar();
+		 ab = getSupportActionBar();
 		//ab.setBackgroundDrawable(new ColorDrawable(0xff123456));
 		mWebView=(WebView)findViewById(R.id.web_frag);
 		mNav= new SimpleSideDrawer(this);
 		mNav.setLeftBehindContentView(R.layout.left_drawer_test);
+		mQuote=(TextView)findViewById(R.id.quote);
+		TextView RollNumber=(TextView) findViewById(R.id.Rollnumber);
 		//boolean mNetworkAvailable=isNetworkAvailable();
 		setTitle("");
+		ParseAnalytics.trackAppOpened(getIntent());
+		 
+        // inform the Parse Cloud that it is ready for notifications
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
 		//Log.d("Network Check", String.valueOf(mNetworkAvailable));
 		mSharedPreferences = getSharedPreferences("com.slateisb.android.aitesam",Context.MODE_PRIVATE);
 		mPrefernceEditor1 = getSharedPreferences("com.slateisb.android.aitesam",MODE_PRIVATE).edit();
 		String flag_time="0";
 		flag_time=mSharedPreferences.getString("FirstTime", "");
+		String Quote=mSharedPreferences.getString("Quote", "");
+		RollNumber.setText(mSharedPreferences.getString("uid", ""));
 		Log.d("Time",flag_time);
 		if(flag_time.equals("1")){
 			srvIntent.setClass(this, ServiceClass.class);
@@ -98,8 +113,8 @@ public class MainActivity extends SherlockActivity {
 				e.printStackTrace();
 			}
 		}
+		mQuote.setText(Quote);
 		//Navigation List Adapter
-		String mUid=mSharedPreferences.getString("uid", "");
 		// Generate Titles
 		title = new String[] { "Home" ,"Messages","Profile","Resources","Preference","Account","Setup"};
 		// Generate subtitle
@@ -112,7 +127,7 @@ public class MainActivity extends SherlockActivity {
 		mDrawerList.setAdapter(mMenuAdapter);
 		//Applications List Adapter
 		String[] titleApp=new String[] {"FaceBook","Report"};
-		String[] subtitleApp=new String[] {"Unblock Able..."};
+		String[] subtitleApp=new String[] {"1","0"};
 		int[] iconApp= new int[] {R.drawable.ic_facebook,R.drawable.ic_report};
 		mAppList=(ListView)findViewById(R.id.drawer_list2);
 		mAppAdapter=new AppListAdapter(this,titleApp,subtitleApp,iconApp);
@@ -122,6 +137,13 @@ public class MainActivity extends SherlockActivity {
 		mAppList.setOnItemClickListener(new AppItemClickListener());
 		ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayUseLogoEnabled(false);
+        Update mStart=new Update();
+        mStart.execute();
+        //mLoad();
+			        	        
+	}
+	private void mLoad() {
+		// TODO Auto-generated method stub
 		mWebView=(WebView)findViewById(R.id.web_frag);
 		//Setting Up WebView
 		WebSettings webSettings = mWebView.getSettings();
@@ -151,7 +173,7 @@ public class MainActivity extends SherlockActivity {
         
         String mCookie=mSharedPreferences.getString("cookie", "");
 		//Setting Up Cookies
-        mCookies=readFromFile("config1.txt");
+       // mCookies=readFromFile("config1.txt");
         Log.d("Cookie_Read_Preference", mCookie);//For Debugging
         CookieSyncManager.createInstance(this);
 	       CookieManager cookieManager = CookieManager.getInstance();
@@ -167,41 +189,18 @@ public class MainActivity extends SherlockActivity {
 	        	 ab.hide();
 	        	mWebView.loadUrl("file:///android_asset/index2.html");
 	        }
-	        /*ImageView imageView=(ImageView)findViewById(R.id.imageView1);
-			
-			try {
-				URL url = new URL("https://i3.sndcdn.com/artworks-000054229283-bh03nh-t120x120.jpg?5ffe3cd");
-				Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-				imageView.setImageBitmap(bmp);
-
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				Log.d("Error During Image Load", e.toString());
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Log.d("Error During Image Load", e.toString());
-				e.printStackTrace();
-			}*/
-	        	        
 	}
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	/*SubMenu sub = menu.addSubMenu("Theme");
-        sub.add(0, R.style.Theme_Sherlock, 0, "Default");
-        sub.add(0, R.style.Theme_Sherlock_Light, 0, "Light");
-        sub.add(0, R.style.Theme_Sherlock_Light_DarkActionBar, 0, "Light (Dark Action Bar)");
-        sub.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        return true;*/
-        getSupportMenuInflater().inflate(R.menu.main_menu, menu);
+    	getSupportMenuInflater().inflate(R.menu.main_menu, menu);
         // set up a listener for the refresh item
         final MenuItem refresh = (MenuItem) menu.findItem(R.id.menu_refresh);
         refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
              // on selecting show progress spinner for 1s
              public boolean onMenuItemClick(MenuItem item) {
-             	Toast.makeText(MainActivity.this, "Refreshed", Toast.LENGTH_SHORT).show();
- 				return false;
-                 // item.setActionView(R.layout.progress_action);
+ 				new Update().execute();
+             	return false;
+                
                 
              }
          });
@@ -230,20 +229,15 @@ public class MainActivity extends SherlockActivity {
 			mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/?force.logout=yes");
 			Toast.makeText(this, "Logging Out", Toast.LENGTH_SHORT).show();
 			mPrefernceEditor1.clear();
+			//mPrefernceEditor1.putString("LoginCheck", "1");
+			mPrefernceEditor1.commit();
 			super.finish();
 			
 		}
 		return super.onOptionsItemSelected(item);
 		
     }
-    private void showDropDownNav() {
-    	ActionBar ab = getSupportActionBar();
-        if (ab.getNavigationMode() != ActionBar.NAVIGATION_MODE_TABS) {
-            ab.setDisplayShowTitleEnabled(false);
-            ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        }
-    }
-	@Override
+    @Override
 	public void onBackPressed(){
 		if(mWebView.canGoBack()){
 		mWebView.goBack();}
@@ -256,45 +250,7 @@ public class MainActivity extends SherlockActivity {
 		System.exit(1);
 		}
 	}
-	private String readFromFile(String mFileName) {
 
-	    String ret = "";
-
-	    try {
-	        InputStream inputStream = openFileInput(mFileName);
-
-	        if ( inputStream != null ) {
-	            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-	            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-	            String receiveString = "";
-	            StringBuilder stringBuilder = new StringBuilder();
-
-	            while ( (receiveString = bufferedReader.readLine()) != null ) {
-	                stringBuilder.append(receiveString);
-	            }
-
-	            inputStream.close();
-	            ret = stringBuilder.toString();
-	        }
-	    }
-	    catch (FileNotFoundException e) {
-	        Log.e("login activity", "File not found: " + e.toString());
-	        Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-	        Intent logintest=new Intent(this,LoginPage.class);
-			startActivity(logintest);
-			writeToFile("1","prefrence.txt");
-			
-	    } catch (IOException e) {
-	        Log.e("login activity", "Can not read file: " + e.toString());
-	        Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-	        Intent logintest=new Intent(this,LoginPage.class);
-			startActivity(logintest);
-			writeToFile("1","prefrence.txt");
-			
-	    }
-
-	    return ret;
-	}
 		public void writeToFile(String data,String mFileName) {
 	    try {
 	        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput(mFileName, Context.MODE_PRIVATE));
@@ -317,7 +273,8 @@ public class MainActivity extends SherlockActivity {
 		}
 
 		private void selectItem(int position) {
-
+			String mUid=mSharedPreferences.getString("uid", "");
+			Log.d("UserId", mUid);
 			// Locate Position
 			switch (position) {
 			case 0:
@@ -367,15 +324,52 @@ public class MainActivity extends SherlockActivity {
 
 		private void selectApp(int position) {
 
-	//FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-	//as=(WebView)findViewById(R.id.content_frame);
-	//as.setWebViewClient(new WebViewClient());
-	// Locate Position
-	String as="";
 	switch (position) {
 	case 0:
-		mWebView.loadUrl("http://www.adfreeproxy.com/browse.php?u=https%3A%2F%2Fm.facebook.com%2F%3F_rdr&b=4");
+		
+		mWebView.loadUrl(mSharedPreferences.getString("Link", ""));
 		Toast.makeText(this, "App Clicked", Toast.LENGTH_SHORT).show();
+		break;
+	case 1:
+		// get prompts.xml view
+		LayoutInflater li = LayoutInflater.from(this);
+		View promptsView = li.inflate(R.layout.report_dialog, null);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				this);
+
+		// set prompts.xml to alertdialog builder
+		alertDialogBuilder.setView(promptsView);
+
+		final EditText mName = (EditText) promptsView
+				.findViewById(R.id.report_name);
+		final EditText mError=(EditText) promptsView.findViewById(R.id.report_error);
+
+		// set dialog message
+		alertDialogBuilder
+			.setCancelable(false)
+			.setPositiveButton("Report",
+			  new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog,int id) {
+				// get user input and set it to result
+				// edit text
+			    	new UploadReport().execute(mName.getText().toString(),mError.getText().toString());
+				//result.setText(userInput.getText());
+			    }
+			  })
+			.setNegativeButton("Cancel",
+			  new DialogInterface.OnClickListener() {
+			    public void onClick(DialogInterface dialog,int id) {
+				dialog.cancel();
+			    }
+			  });
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+
 		break;
 	}
 	//mWebView.loadUrl(as);
@@ -401,6 +395,86 @@ public class MainActivity extends SherlockActivity {
 		          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		}
+		private class UploadReport extends AsyncTask<String, Void, Void>{
+			@Override
+			protected void onPreExecute() {
+	            super.onPreExecute();
+	            
+	            Log.d("Test ON pre", "Running Ok");
+			}
+			@Override
+			protected Void doInBackground(String... args) {
+				// TODO Auto-generated method stub
+				String mName = args[0];
+				String mError=args[1];
+				ParseObject gameScore = new ParseObject("Report");
+		        gameScore.put("Name", mName);
+		        gameScore.put("Error", mError);
+		        gameScore.put("Network", "Wifi");
+		        gameScore.saveInBackground();
+		        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+	                    "Quotes");
+	            query.orderByDescending("_created_at");
+	            try {
+	                ob = query.find();
+	            } catch (ParseException e) {
+	                Log.e("Error", e.getMessage());
+	                e.printStackTrace();
+	            }
+		        //Intent i = getIntent();
+				return null;
+			}
+			@Override
+			 protected void onPostExecute(Void result) {
+				Log.d("Report", "Report Ok");
+			}
+
+			
+		}
+		private class Update extends AsyncTask<String, Void, Void>{
+			@Override
+			protected void onPreExecute() {
+	            super.onPreExecute();
+	            //Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_SHORT).show();
+	            Log.d("Test ON pre", "Running Ok");
+			}
+			@Override
+			protected Void doInBackground(String... args) {
+				// TODO Auto-generated method stub
+				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+	                    "Quotes");
+	            query.orderByDescending("_created_at");
+	            try {
+	                ob = query.find();
+	            } catch (ParseException e) {
+	                Log.e("Error", e.getMessage());
+	                e.printStackTrace();
+	            }
+		        //Intent i = getIntent();
+
+	            mLoad();
+				return null;
+			}
+			@Override
+			 protected void onPostExecute(Void result) {
+				Log.d("Report", "Report Ok");
+				int i=0;
+				for (ParseObject country : ob) {
+					mQuote.setText((String)country.get("name"));
+					if(i==0){
+					mPrefernceEditor1.putString("Link", (String)country.get("name"));
+					//mPrefernceEditor1.putString("LoginCheck", "1");
+					mPrefernceEditor1.commit();
+					i++;}
+					else{
+						mPrefernceEditor1.putString("Quote", (String)country.get("name"));
+					mPrefernceEditor1.commit();}
+					// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
+	            }
+			}
+
+			
 		}
 
 }
