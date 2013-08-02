@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Slate_Nuces</string>
+    <string name="app_name">Slate Isb</string>
     <string name="action_settings">Settings</string>
     <string name="uid_login">Roll Number</string>
     <string name="btn_login">Login</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Slate</string>
     <string name="hello_world">Hello world!</string>
     <string name="upw_login">Password</string>
 <string name="action_label_refresh">Refresh</string>

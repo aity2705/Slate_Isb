@@ -33,7 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="@null"
-        android:src="@drawable/fast_logo_s" />
+        android:src="@drawable/slate_logo" />
 
     <EditText
         android:id="@+id/pw"

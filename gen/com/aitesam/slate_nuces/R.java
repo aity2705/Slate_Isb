@@ -834,8 +834,9 @@ containing a value of this type.
         public static final int list1=0x7f02007d;
         public static final int login_background=0x7f02007e;
         public static final int login_button_s=0x7f02007f;
-        public static final int spinner_default_holo_light=0x7f020080;
-        public static final int spinner_disabled_holo_light=0x7f020081;
+        public static final int slate_logo=0x7f020080;
+        public static final int spinner_default_holo_light=0x7f020081;
+        public static final int spinner_disabled_holo_light=0x7f020082;
     }
     public static final class id {
         public static final int Rollnumber=0x7f040036;

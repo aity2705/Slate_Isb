@@ -110,6 +110,7 @@ public class MainActivity extends SherlockActivity {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
+				Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
 				e.printStackTrace();
 			}
 		}

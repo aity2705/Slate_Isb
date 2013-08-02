@@ -29,7 +29,7 @@
 		android:title="@string/action_label_refresh" android:icon="@drawable/ic_menu_refresh_holo_light" />
 
 	<item android:id="@+id/menu_up" android:showAsAction="never"
-		android:checkable="true" android:checked="false" android:title="@string/action_label_up" />
+		android:checkable="false" android:checked="false" android:title="@string/action_label_up" />
 
 	<!-- Navigation submenu -->
 	<item

@@ -145,12 +145,12 @@ public class ServiceClass extends Service{
      
     private int anucount(String responseString2) {
     	// TODO Auto-generated method stub
-    				Date test = new Date();
+    				//Date test = new Date();
     				
     				int start=responseString2.indexOf("View announcement");
     		        int end=responseString2.indexOf("pda-footer");
-    		        responseString2=responseString2.substring(start, end);
-    		        Log.d("In Function", test.toString());
+    		        //responseString2=responseString2.substring(start, end);
+    		        //Log.d("In Function", test.toString());
     				int number=0;
     				int index=0;
     				while(true){

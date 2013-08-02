@@ -18,11 +18,11 @@
 </style>
 
 <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-    <item name="background">#646D7E</item>
-    <item name="android:background">#646D7E</item>
+    <item name="background">#2C3539</item>
+    <item name="android:background">#2C3539</item>
 
-    <item name="backgroundSplit">#646D7E</item>
-    <item name="android:backgroundSplit">#646D7E</item>
+    <item name="backgroundSplit">#2C3539</item>
+    <item name="android:backgroundSplit">#2C3539</item>
 </style>
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
