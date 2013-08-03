@@ -9,6 +9,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
+import com.actionbarsherlock.view.Window;
 import com.navdrawer.SimpleSideDrawer;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -35,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -42,6 +44,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,11 +77,15 @@ public class MainActivity extends SherlockActivity {
 		Editor mPrefernceEditor1;
 		TextView mQuote;
 		ActionBar ab;
+		ProgressBar progressBar;
+		private Menu optionsMenu;
         
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
+		setSupportProgressBarIndeterminateVisibility(false);  
 		//Setting Views
 		 ab = getSupportActionBar();
 		//ab.setBackgroundDrawable(new ColorDrawable(0xff123456));
@@ -138,23 +145,31 @@ public class MainActivity extends SherlockActivity {
 		mAppList.setOnItemClickListener(new AppItemClickListener());
 		ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayUseLogoEnabled(false);
-        Update mStart=new Update();
-        mStart.execute();
-        //mLoad();
+        //Update mStart=new Update();
+        //mStart.execute();
+        mLoad();
 			        	        
 	}
 	private void mLoad() {
+		getSherlock().setProgressBarIndeterminateVisibility(true);
 		// TODO Auto-generated method stub
 		mWebView=(WebView)findViewById(R.id.web_frag);
+		//mWebView.setWebChromeClient(new WebChromeClient());
 		//Setting Up WebView
 		WebSettings webSettings = mWebView.getSettings();
         webSettings.setSavePassword(true);
         webSettings.setSaveFormData(true);
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAppCacheMaxSize(1024*1024*10);
+        webSettings.setAppCachePath(this.getFilesDir().getPath());
         webSettings.setSupportZoom(false);
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
         mWebView.setWebViewClient(new WebViewClient() {
+        	@Override
             public boolean shouldOverrideUrlLoading(WebView view, String url){
+            	//getSherlock().setProgressBarIndeterminateVisibility(true);
                if(url.equals("http://slateisb.nu.edu.pk/portal/pda/?force.logout=yes")){
             		Toast.makeText(MainActivity.this, "Ok Test", Toast.LENGTH_LONG).show();
             		return true;
@@ -167,7 +182,7 @@ public class MainActivity extends SherlockActivity {
             	view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#include').remove();});");
             	 view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#pda-footer').hide();});");
             	 view.loadUrl("javascript:(function(e,a,g,h,f,c,b,d){if(!(f=e.jQuery)||g>f.fn.jquery||h(f)){c=a.createElement('script');c.type='text/javascript';c.src='http://ajax.googleapis.com/ajax/libs/jquery/'+g+'/jquery.min.js';c.onload=c.onreadystatechange=function(){if(!b&&(!(d=this.readyState)||d=='loaded'||d=='complete')){h((f=e.jQuery).noConflict(1),b=1);f(c).remove()}};a.documentElement.childNodes[0].appendChild(c)}})(window,document,'1.3.2',function($,L){$('#pda-portlet-menu').hide();});");
-	    	
+            	 getSherlock().setProgressBarIndeterminateVisibility(false);
             }
 
         });
@@ -196,9 +211,13 @@ public class MainActivity extends SherlockActivity {
     	getSupportMenuInflater().inflate(R.menu.main_menu, menu);
         // set up a listener for the refresh item
         final MenuItem refresh = (MenuItem) menu.findItem(R.id.menu_refresh);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+        //final MenuItem prog = (MenuItem) menu.findItem(R.id.menu_progress);
+        
         refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
              // on selecting show progress spinner for 1s
              public boolean onMenuItemClick(MenuItem item) {
+            	 
  				new Update().execute();
              	return false;
                 
@@ -211,6 +230,21 @@ public class MainActivity extends SherlockActivity {
        tv.setText(mNotificationCount);
         return super.onCreateOptionsMenu(menu);
 }
+	public void setRefreshActionButtonState(final boolean refreshing) {
+	    if (optionsMenu != null) {
+	        final MenuItem refreshItem = optionsMenu
+	            .findItem(R.id.menu_refresh);
+	        if (refreshItem != null) {
+	            if (refreshing) {
+	                refreshItem.setActionView(R.layout.action_progress);
+	                refreshItem.setIcon(R.drawable.ic_messages);
+	            } else {
+	                refreshItem.setActionView(null);
+	            }
+	        }
+	    }
+	}
+	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -467,6 +501,8 @@ public class MainActivity extends SherlockActivity {
 			@Override
 			protected void onPreExecute() {
 	            super.onPreExecute();
+	            getSherlock().setProgressBarIndeterminateVisibility(true);
+	           // progressBar.setVisibility(0);
 	            //Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_SHORT).show();
 	            Log.d("Test ON pre", "Running Ok");
 			}
@@ -503,6 +539,8 @@ public class MainActivity extends SherlockActivity {
 					mPrefernceEditor1.commit();}
 					// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
 	            }
+				getSherlock().setProgressBarIndeterminateVisibility(false);
+				//progressBar.setVisibility(4);
 			}
 
 			

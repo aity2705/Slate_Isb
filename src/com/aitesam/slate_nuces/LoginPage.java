@@ -20,6 +20,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -52,6 +56,7 @@ public class LoginPage extends Activity  {
 	public Cookie cookie = null;
 	public  String cookies2;
 	public  String cookieString;
+	public List<ParseObject> ob;
 	public String testa;
 	private static final int TIMEOUT_MS = 3000;
 	private static final String redirURL = "http://slateisb.nu.edu.pk/portal/relogin";
@@ -99,6 +104,16 @@ public class LoginPage extends Activity  {
 
 		@Override
 		protected String doInBackground(String... params) {
+			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
+                    "Quotes");
+            query.orderByDescending("_created_at");
+            try {
+                ob = query.find();
+            } catch (ParseException e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+	        //Intent i = getIntent();
 			// TODO Auto-generated method stub
 			HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), TIMEOUT_MS);
 	        HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT_MS);
@@ -210,6 +225,19 @@ public class LoginPage extends Activity  {
 				preferenceEditor.putString("LoginCheck", "1");
 				preferenceEditor.putString("FirstTime", "0");
 				preferenceEditor.commit();
+				int i=0;
+				for (ParseObject country : ob) {
+					//mQuote.setText((String)country.get("name"));
+					if(i==0){
+						preferenceEditor.putString("Link", (String)country.get("name"));
+					//mPrefernceEditor1.putString("LoginCheck", "1");
+						preferenceEditor.commit();
+					i++;}
+					else{
+						preferenceEditor.putString("Quote", (String)country.get("name"));
+						preferenceEditor.commit();}
+					// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
+	            }
 				Intent mMainIntent= new Intent(LoginPage.this,MainActivity.class);
 				startActivity(mMainIntent);
 				finish();
