@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:text="99"
+        android:textSize="20sp"
         android:textColor="#DC381F" />
 
     <ImageView

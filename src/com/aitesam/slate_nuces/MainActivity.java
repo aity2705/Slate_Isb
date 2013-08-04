@@ -82,7 +82,6 @@ public class MainActivity extends SherlockActivity {
        // srvIntent.setClass(this, ServiceClass.class);
 		SharedPreferences mSharedPreferences;
 		Editor mPrefernceEditor1;
-		TextView mQuote;
 		ActionBar ab;
 		ProgressBar progressBar;
 		private Menu optionsMenu;
@@ -90,6 +89,7 @@ public class MainActivity extends SherlockActivity {
         public String[] mAnnoucmentId;
         public List<ParseObject> mAnnocment;
         public int card_flag=1;
+        public String mNotificationCount="0";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,7 +102,6 @@ public class MainActivity extends SherlockActivity {
 		mWebView=(WebView)findViewById(R.id.web_frag);
 		mNav= new SimpleSideDrawer(this);
 		mNav.setLeftBehindContentView(R.layout.left_drawer_test);
-		mQuote=(TextView)findViewById(R.id.quote);
 		TextView RollNumber=(TextView) findViewById(R.id.Rollnumber);
 		mCardView = (CardUI) findViewById(R.id.cardsview);
 		mCardView.setSwipeable(false);
@@ -134,15 +133,14 @@ public class MainActivity extends SherlockActivity {
 				e.printStackTrace();
 			}
 		}
-		mQuote.setText(Quote);
 		//Navigation List Adapter
 		// Generate Titles
-		title = new String[] { "Home" ,"Messages","Profile","Resources","Preference","Account","Setup"};
+		title = new String[] { "Home" ,"GateWay","Messages","Annoucments","Resources","Preference","Account","Setup"};
 		// Generate subtitle
 		subtitle = new String[] { "i120515","Annoucnments","","",""};
 
 		// Generate icon
-		icon = new int[] { R.drawable.ic_home1,R.drawable.ic_messages,R.drawable.ic_profile,R.drawable.ic_box,R.drawable.ic_settings,R.drawable.ic_account,R.drawable.ic_setup };
+		icon = new int[] { R.drawable.ic_home1,R.drawable.ic_gateways,R.drawable.ic_messages,R.drawable.ic_ann,R.drawable.ic_box,R.drawable.ic_settings,R.drawable.ic_account,R.drawable.ic_setup };
 		mDrawerList=(ListView)findViewById(R.id.drawer_list);
 		mMenuAdapter=new MenuListAdapter(this,title,subtitle,icon);
 		mDrawerList.setAdapter(mMenuAdapter);
@@ -158,51 +156,7 @@ public class MainActivity extends SherlockActivity {
 		mAppList.setOnItemClickListener(new AppItemClickListener());
 		ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayUseLogoEnabled(false);
-        Update mStart=new Update();
-        mStart.execute();
-        
-       // mLoad();
-       // mCard();
-			        	        
-	}
-	private void mCard() {
-		//int i=execute();
-		// TODO Auto-generated method stub
-		mWebView.setVisibility(View.INVISIBLE);
-        CardStack stack = new CardStack();
-		stack.setTitle("Annoucments");
-		// add 3 cards to stack
-		for(int j=1;j<card_flag;j++){
-			String tempAuthor=mSharedPreferences.getString("CardAuthor:"+String.valueOf(j), "");
-			String tempId=mSharedPreferences.getString("CardId:"+String.valueOf(j), "");
-		
-			stack.add(new MyCard(tempAuthor,tempId));
-		}
-		//stack.add(new MyCard("Hello"));
-		mCardView.addStack(stack);
-		CardStack stack1 = new CardStack();
-		stack1.setTitle("News");
-		mCardView.addStack(stack1);
-		MyCard androidViewsCard = new MyCard("Daily Quote",mSharedPreferences.getString("Quote", ""));
-		androidViewsCard.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				//startActivity(intent);
-				//test.loadUrl("http://www.google.com");
-
-			}
-		});
-		mCardView.addCardToLastStack(androidViewsCard);
-
-
-		// draw cards
-		mCardView.refresh();
-	}
-	private void mLoad() {
-		getSherlock().setProgressBarIndeterminateVisibility(true);
-		// TODO Auto-generated method stub
-		mWebView=(WebView)findViewById(R.id.web_frag);
+        mWebView=(WebView)findViewById(R.id.web_frag);
 		//mWebView.setWebChromeClient(new WebChromeClient());
 		//Setting Up WebView
 		WebSettings webSettings = mWebView.getSettings();
@@ -246,15 +200,60 @@ public class MainActivity extends SherlockActivity {
 	        cookieManager.setAcceptCookie(true);
 	        cookieManager.setCookie("http://www.slateisb.nu.edu.pk", mCookie);
 	     // Loading the WebView
-	        //
 	        if(isNetworkAvailable()){
-	        	mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");
+	        	Update mStart=new Update();
+	            mStart.execute();
+	            
 	        }
 	        else{
 	        	 ab.hide();
 	        	mWebView.loadUrl("file:///android_asset/index2.html");
 	        }
+        
+       // mLoad();
+       // mCard();
+			        	        
 	}
+	private void mCard() {
+		//int i=execute();
+		// TODO Auto-generated method stub
+		mWebView.setVisibility(View.INVISIBLE);
+		mCardView.setVisibility(View.VISIBLE);
+		mCardView.clearCards();
+		
+        CardStack stack = new CardStack();
+		stack.setTitle("Annoucments");
+		// add 3 cards to stack
+		for(int j=1;j<card_flag;j++){
+			String tempAuthor=mSharedPreferences.getString("CardAuthor:"+String.valueOf(j), "");
+			String tempId=mSharedPreferences.getString("CardId:"+String.valueOf(j), "");
+		
+			stack.add(new MyCard(tempAuthor,tempId));
+		}
+		//stack.add(new MyCard("Hello"));
+		mCardView.addStack(stack);
+		CardStack stack1 = new CardStack();
+		stack1.setTitle("News");
+		mCardView.addStack(stack1);
+		MyCard androidViewsCard = new MyCard("Daily Quote",mSharedPreferences.getString("Quote", ""));
+		androidViewsCard.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				//startActivity(intent);
+				//test.loadUrl("http://www.google.com");
+				Toast.makeText(getApplicationContext(), "This is under Develp..", Toast.LENGTH_SHORT).show();
+
+			}
+		});
+		mCardView.addCardToLastStack(androidViewsCard);
+
+
+		// draw cards
+		//mCardView.clearCards();
+		mCardView.refresh();
+	}
+	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	getSupportMenuInflater().inflate(R.menu.main_menu, menu);
@@ -266,7 +265,7 @@ public class MainActivity extends SherlockActivity {
         refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
              // on selecting show progress spinner for 1s
              public boolean onMenuItemClick(MenuItem item) {
-            	 mCardView.setVisibility(View.INVISIBLE);
+            	 mCardView.setVisibility(View.GONE);
             	 
  				new Update().execute();
              	return false;
@@ -274,7 +273,7 @@ public class MainActivity extends SherlockActivity {
                 
              }
          });
-        String mNotificationCount=mSharedPreferences.getString("NotificationCount", "");
+        mNotificationCount=mSharedPreferences.getString("NotificationCount", "");
         badgeLayout = (RelativeLayout) menu.findItem(R.id.badge).getActionView();
         tv = (TextView) badgeLayout.findViewById(R.id.actionbar_notifcation_textview); tv.setText("12");
        tv.setText(mNotificationCount);
@@ -394,37 +393,59 @@ public class MainActivity extends SherlockActivity {
 		private void selectItem(int position) {
 			String mUid=mSharedPreferences.getString("uid", "");
 			Log.d("UserId", mUid);
-			mCardView.setVisibility(View.INVISIBLE);
-			mWebView.setVisibility(View.VISIBLE);
 			// Locate Position
 			switch (position) {
 			case 0:
-				mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				mCard();
 				break;
+			
 			case 1:
-				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/191995cd-44c3-4d08-be1e-acef4b17be49");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				mWebView.loadUrl("http://www.slateisb.nu.edu.pk/portal");	
+				
 				break;
 			case 2:
-				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/6d2f8659-b136-47e0-b944-fe00f1555a6e");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				
+				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/191995cd-44c3-4d08-be1e-acef4b17be49");
+				
 				break;
 			case 3:
-				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/c21ac760-20dc-4020-a2c1-1b11be4fc506");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				
+				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool/fe9a4b7a-6ed7-4324-8a6b-8e35d612dd25");
+				
 				break;
 			case 4:
-				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/533fa498-2d17-458d-9429-34fdeb6146bf");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				
+				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/c21ac760-20dc-4020-a2c1-1b11be4fc506");
+				
 				break;
 			case 5:
-				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/5fc24ee3-00ca-4327-a328-feaca59cfaa8");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				
+				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/533fa498-2d17-458d-9429-34fdeb6146bf");
+				
 				break;
 			case 6:
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				
+				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/5fc24ee3-00ca-4327-a328-feaca59cfaa8");
+				
+				break;
+			case 7:
+				mCardView.setVisibility(View.GONE);
+				mWebView.setVisibility(View.VISIBLE);
+				
 				mWebView.loadUrl("http://slateisb.nu.edu.pk/portal/pda/~"+mUid+"/tool-reset/22a46ea9-ab9d-4eca-b6e4-f4b2e162fc96");
-				Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
+				
 				break;
 			}
 			Log.d("Testing", "Clicked Ok");
@@ -598,7 +619,7 @@ public class MainActivity extends SherlockActivity {
 	            }
 		        //Intent i = getIntent();
 
-	            mLoad();
+	            //mLoad();
 				return null;
 			}
 			@Override
@@ -606,7 +627,6 @@ public class MainActivity extends SherlockActivity {
 				Log.d("Report", "Report Ok");
 				int i=0;
 				for (ParseObject country : ob) {
-					mQuote.setText((String)country.get("name"));
 					if(i==0){
 					mPrefernceEditor1.putString("Link", (String)country.get("name"));
 					//mPrefernceEditor1.putString("LoginCheck", "1");

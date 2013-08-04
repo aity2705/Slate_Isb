@@ -60,4 +60,13 @@
         android:background="@null"
         android:src="@drawable/login_button_s" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pw"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="42dp"
+        android:text="This App is in Beta State\n Please Report if problem Occurs\nOr FeedBack" />
+
 </RelativeLayout>

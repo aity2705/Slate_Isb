@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
+    android:layout_width="270dp"
     android:layout_height="match_parent"
     android:background="@drawable/drawer_back" >
 
 <LinearLayout
-    android:layout_width="200dp"
+    android:layout_width="270dp"
     android:layout_height="436dp"
     android:orientation="vertical" >
 
@@ -44,31 +44,9 @@
   	     <ListView
             android:id="@+id/drawer_list"
             android:layout_width="match_parent"
-            android:layout_height="200dp" >
+            android:layout_height="225dp" >
         </ListView>
-        <LinearLayout android:layout_width="200dp"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-        <TextView 
-		  android:id="@+id/myTitle2" 
-		  android:text="Daily Quote:" 
-		  android:layout_width="fill_parent" 
-		  android:layout_height="20dp" 
-		  android:textColor="#000000"
-		  android:gravity="left"
-		  android:background="@drawable/header"
-		   />
-        <TextView 
-		  android:id="@+id/quote" 
-		  android:text="Dont Let The World Change Your Smile,
-		  Let Your Smile Change The World.." 
-		  android:layout_width="wrap_content" 
-		  android:layout_height="wrap_content" 
-		  android:textColor="#ADA96E"
-		   />
-     
-        </LinearLayout>
-        <TextView 
+       <TextView 
 		  android:id="@+id/myTitle3" 
 		  android:text="Apps" 
 		  android:layout_width="fill_parent" 
