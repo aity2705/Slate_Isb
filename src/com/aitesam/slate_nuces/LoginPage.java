@@ -141,7 +141,7 @@ public class LoginPage extends Activity  {
 		        response.getEntity().writeTo(out);
 		        out.close();
 		        String responseString = out.toString();
-	            login_pass=responseString.indexOf("alertMessage");
+	            login_pass=responseString.indexOf("Invalid login");
 	            Log.d("Login Response", String.valueOf(login_pass));
     	        //String responseString2=responseStr.replaceFirst("View announcement", "");
     	        int number=anucount(responseStr);

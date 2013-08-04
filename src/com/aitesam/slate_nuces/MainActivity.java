@@ -10,6 +10,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.view.Window;
+import com.fima.cardsui.objects.Card;
+import com.fima.cardsui.objects.CardStack;
+import com.fima.cardsui.views.CardUI;
 import com.navdrawer.SimpleSideDrawer;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -27,13 +30,16 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
@@ -57,6 +63,7 @@ public class MainActivity extends SherlockActivity {
 	public WebView web_test;
 	public int a=0;
 	public List<ParseObject> ob;
+	public CardUI mCardView;
 	// Declare Variable
 		DrawerLayout mDrawerLayout;
 		ListView mDrawerList;
@@ -79,7 +86,10 @@ public class MainActivity extends SherlockActivity {
 		ActionBar ab;
 		ProgressBar progressBar;
 		private Menu optionsMenu;
-        
+        public String[] mAnnoucmentAuthor;
+        public String[] mAnnoucmentId;
+        public List<ParseObject> mAnnocment;
+        public int card_flag=1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,6 +104,9 @@ public class MainActivity extends SherlockActivity {
 		mNav.setLeftBehindContentView(R.layout.left_drawer_test);
 		mQuote=(TextView)findViewById(R.id.quote);
 		TextView RollNumber=(TextView) findViewById(R.id.Rollnumber);
+		mCardView = (CardUI) findViewById(R.id.cardsview);
+		mCardView.setSwipeable(false);
+
 		//boolean mNetworkAvailable=isNetworkAvailable();
 		setTitle("");
 		ParseAnalytics.trackAppOpened(getIntent());
@@ -145,10 +158,46 @@ public class MainActivity extends SherlockActivity {
 		mAppList.setOnItemClickListener(new AppItemClickListener());
 		ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayUseLogoEnabled(false);
-        //Update mStart=new Update();
-        //mStart.execute();
-        mLoad();
+        Update mStart=new Update();
+        mStart.execute();
+        
+       // mLoad();
+       // mCard();
 			        	        
+	}
+	private void mCard() {
+		//int i=execute();
+		// TODO Auto-generated method stub
+		mWebView.setVisibility(View.INVISIBLE);
+        CardStack stack = new CardStack();
+		stack.setTitle("Annoucments");
+		// add 3 cards to stack
+		for(int j=1;j<card_flag;j++){
+			String tempAuthor=mSharedPreferences.getString("CardAuthor:"+String.valueOf(j), "");
+			String tempId=mSharedPreferences.getString("CardId:"+String.valueOf(j), "");
+		
+			stack.add(new MyCard(tempAuthor,tempId));
+		}
+		//stack.add(new MyCard("Hello"));
+		mCardView.addStack(stack);
+		CardStack stack1 = new CardStack();
+		stack1.setTitle("News");
+		mCardView.addStack(stack1);
+		MyCard androidViewsCard = new MyCard("Daily Quote",mSharedPreferences.getString("Quote", ""));
+		androidViewsCard.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				//startActivity(intent);
+				//test.loadUrl("http://www.google.com");
+
+			}
+		});
+		mCardView.addCardToLastStack(androidViewsCard);
+
+
+		// draw cards
+		mCardView.refresh();
 	}
 	private void mLoad() {
 		getSherlock().setProgressBarIndeterminateVisibility(true);
@@ -217,6 +266,7 @@ public class MainActivity extends SherlockActivity {
         refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
              // on selecting show progress spinner for 1s
              public boolean onMenuItemClick(MenuItem item) {
+            	 mCardView.setVisibility(View.INVISIBLE);
             	 
  				new Update().execute();
              	return false;
@@ -302,6 +352,7 @@ public class MainActivity extends SherlockActivity {
 		return super.onOptionsItemSelected(item);
 		
     }
+    
     @Override
 	public void onBackPressed(){
 		if(mWebView.canGoBack()){
@@ -309,8 +360,11 @@ public class MainActivity extends SherlockActivity {
 		else{
 		super.onBackPressed();
 		//Intent srvIntent = new Intent();
-        srvIntent.setClass(this, ServiceClass.class);
-        //this.startService(srvIntent);
+        //srvIntent.setClass(this, ServiceClass.class);
+		mWebView.clearCache(true);
+		mWebView.setVisibility(View.INVISIBLE);
+		mCardView.setVisibility(View.VISIBLE);
+		//this.startService(srvIntent);
         super.finish();
 		System.exit(1);
 		}
@@ -340,6 +394,8 @@ public class MainActivity extends SherlockActivity {
 		private void selectItem(int position) {
 			String mUid=mSharedPreferences.getString("uid", "");
 			Log.d("UserId", mUid);
+			mCardView.setVisibility(View.INVISIBLE);
+			mWebView.setVisibility(View.VISIBLE);
 			// Locate Position
 			switch (position) {
 			case 0:
@@ -508,6 +564,28 @@ public class MainActivity extends SherlockActivity {
 			}
 			@Override
 			protected Void doInBackground(String... args) {
+				ParseQuery<ParseObject> query_anc = new ParseQuery<ParseObject>(
+		                "Annoucments");
+				query_anc.orderByDescending("_created_at");
+		        int i=1;
+		        try {
+		            mAnnocment = query_anc.find();
+		            
+					for (ParseObject temp : mAnnocment) {
+						mPrefernceEditor1.putString("CardId:"+String.valueOf(i), (String)temp.get("Id"));
+						mPrefernceEditor1.putString("CardAuthor:"+String.valueOf(i), (String)temp.get("Author"));
+						mPrefernceEditor1.commit();
+						Log.d("Testing Parser", (String)temp.get("Author"));
+						//mAnnoucmentAuthor[i]=(String)temp.get("Author");
+							i++;
+					}
+						// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
+		            
+		        } catch (ParseException e) {
+		            Log.e("Error", e.getMessage());
+		            e.printStackTrace();
+		        }
+		        card_flag=i;
 				// TODO Auto-generated method stub
 				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
 	                    "Quotes");
@@ -541,6 +619,7 @@ public class MainActivity extends SherlockActivity {
 	            }
 				getSherlock().setProgressBarIndeterminateVisibility(false);
 				//progressBar.setVisibility(4);
+				mCard();
 			}
 
 			
