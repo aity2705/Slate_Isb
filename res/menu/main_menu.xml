@@ -37,5 +37,11 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="About"/>
+	<item
+        android:id="@+id/menu_update"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Update"/>
+	
 	
 </menu>

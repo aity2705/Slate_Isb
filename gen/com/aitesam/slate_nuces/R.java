@@ -1059,9 +1059,9 @@ containing a value of this type.
         public static final int abs__title=0x7f07001b;
         public static final int abs__titleDivider=0x7f07001c;
         public static final int abs__up=0x7f07000b;
-        public static final int action_settings=0x7f070049;
+        public static final int action_settings=0x7f07004a;
         public static final int actionbar_notifcation_textview=0x7f070046;
-        public static final int badge=0x7f07004a;
+        public static final int badge=0x7f07004b;
         public static final int behind_btn=0x7f070034;
         public static final int btn_login=0x7f07002a;
         public static final int cardContent=0x7f07003f;
@@ -1081,9 +1081,10 @@ containing a value of this type.
         public static final int listMode=0x7f070002;
         public static final int listView=0x7f070030;
         public static final int logo=0x7f070028;
-        public static final int menu_about=0x7f07004d;
-        public static final int menu_refresh=0x7f07004b;
-        public static final int menu_up=0x7f07004c;
+        public static final int menu_about=0x7f07004e;
+        public static final int menu_refresh=0x7f07004c;
+        public static final int menu_up=0x7f07004d;
+        public static final int menu_update=0x7f07004f;
         public static final int myTitle3=0x7f070044;
         public static final int normal=0x7f070001;
         public static final int placeholder=0x7f07003d;
@@ -1105,6 +1106,7 @@ containing a value of this type.
         public static final int useLogo=0x7f070004;
         public static final int webView1=0x7f070036;
         public static final int web_frag=0x7f07002c;
+        public static final int webtest=0x7f070049;
         public static final int wrap_content=0x7f070000;
     }
     public static final class integer {
@@ -1153,6 +1155,7 @@ containing a value of this type.
         public static final int report_dialog=0x7f030027;
         public static final int sherlock_spinner_dropdown_item=0x7f030028;
         public static final int sherlock_spinner_item=0x7f030029;
+        public static final int web_card=0x7f03002a;
     }
     public static final class menu {
         public static final int login_page=0x7f0b0000;

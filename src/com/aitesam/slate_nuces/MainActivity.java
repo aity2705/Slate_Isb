@@ -88,6 +88,7 @@ public class MainActivity extends SherlockActivity {
         public String[] mAnnoucmentAuthor;
         public String[] mAnnoucmentId;
         public List<ParseObject> mAnnocment;
+        public String name;
         public int card_flag=1;
         public String mNotificationCount="0";
 	@Override
@@ -119,7 +120,8 @@ public class MainActivity extends SherlockActivity {
 		String flag_time="0";
 		flag_time=mSharedPreferences.getString("FirstTime", "");
 		String Quote=mSharedPreferences.getString("Quote", "");
-		RollNumber.setText(mSharedPreferences.getString("uid", ""));
+		name=mSharedPreferences.getString("uid", "");
+		RollNumber.setText(name);
 		Log.d("Time",flag_time);
 		if(flag_time.equals("1")){
 			srvIntent.setClass(this, ServiceClass.class);
@@ -220,38 +222,39 @@ public class MainActivity extends SherlockActivity {
 		mWebView.setVisibility(View.INVISIBLE);
 		mCardView.setVisibility(View.VISIBLE);
 		mCardView.clearCards();
-		
-        CardStack stack = new CardStack();
-		stack.setTitle("Annoucments");
-		// add 3 cards to stack
-		for(int j=1;j<card_flag;j++){
-			String tempAuthor=mSharedPreferences.getString("CardAuthor:"+String.valueOf(j), "");
-			String tempId=mSharedPreferences.getString("CardId:"+String.valueOf(j), "");
-		
-			stack.add(new MyCard(tempAuthor,tempId));
-		}
-		//stack.add(new MyCard("Hello"));
-		mCardView.addStack(stack);
-		CardStack stack1 = new CardStack();
-		stack1.setTitle("News");
-		mCardView.addStack(stack1);
-		MyCard androidViewsCard = new MyCard("Daily Quote",mSharedPreferences.getString("Quote", ""));
-		androidViewsCard.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				//startActivity(intent);
-				//test.loadUrl("http://www.google.com");
-				Toast.makeText(getApplicationContext(), "This is under Develp..", Toast.LENGTH_SHORT).show();
-
+				ParseQuery<ParseObject> query_anc = new ParseQuery<ParseObject>(
+                "Annoucments");
+		query_anc.orderByDescending("_created_at");
+        int i=1;
+        try {
+            mAnnocment = query_anc.find();
+            CardStack stack = new CardStack();
+			stack.setTitle("Annoucments");
+			
+			for (ParseObject temp : mAnnocment) {
+				mPrefernceEditor1.putString("CardId:"+String.valueOf(i), (String)temp.get("Id"));
+				mPrefernceEditor1.putString("linka"+String.valueOf(i), (String)temp.get("linka"));
+				mPrefernceEditor1.commit();
+				stack.add(new AnnoucmentCard((String)temp.get("Id"),"http://www.slateisb.nu.edu.pk/portal/pda/~"+name+(String) temp.get("linka")));
+				Log.d("Testing Parser", (String)temp.get("Author"));
+				//mAnnoucmentAuthor[i]=(String)temp.get("Author");
+					i++;
 			}
-		});
-		mCardView.addCardToLastStack(androidViewsCard);
-
-
-		// draw cards
-		//mCardView.clearCards();
-		mCardView.refresh();
+			// add 3 cards to stack
+			//stack.add(new MyCard("Hello"));
+			mCardView.addStack(stack);CardStack stack1 = new CardStack();
+			stack1.setTitle("News");
+			mCardView.addStack(stack1);
+			MyCard androidViewsCard = new MyCard("Daily Quote",mSharedPreferences.getString("Quote", ""));
+			mCardView.addCardToLastStack(androidViewsCard);
+			mCardView.refresh();
+				// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
+            
+        } catch (ParseException e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+		
 	}
 	
 	@Override
@@ -347,6 +350,13 @@ public class MainActivity extends SherlockActivity {
 			mPrefernceEditor1.commit();
 			super.finish();
 			
+		}
+		if(item.getItemId()==R.id.menu_update){
+			if(mSharedPreferences.getString("Update", "").equals("update")){
+			final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://m.facebook.com"));
+			startActivity(intent);	}
+			else
+				Toast.makeText(this, "No New Update Availabel", Toast.LENGTH_SHORT).show();
 		}
 		return super.onOptionsItemSelected(item);
 		
@@ -585,29 +595,7 @@ public class MainActivity extends SherlockActivity {
 			}
 			@Override
 			protected Void doInBackground(String... args) {
-				ParseQuery<ParseObject> query_anc = new ParseQuery<ParseObject>(
-		                "Annoucments");
-				query_anc.orderByDescending("_created_at");
-		        int i=1;
-		        try {
-		            mAnnocment = query_anc.find();
-		            
-					for (ParseObject temp : mAnnocment) {
-						mPrefernceEditor1.putString("CardId:"+String.valueOf(i), (String)temp.get("Id"));
-						mPrefernceEditor1.putString("CardAuthor:"+String.valueOf(i), (String)temp.get("Author"));
-						mPrefernceEditor1.commit();
-						Log.d("Testing Parser", (String)temp.get("Author"));
-						//mAnnoucmentAuthor[i]=(String)temp.get("Author");
-							i++;
-					}
-						// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
-		            
-		        } catch (ParseException e) {
-		            Log.e("Error", e.getMessage());
-		            e.printStackTrace();
-		        }
-		        card_flag=i;
-				// TODO Auto-generated method stub
+			// TODO Auto-generated method stub
 				ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(
 	                    "Quotes");
 	            query.orderByDescending("_created_at");
@@ -627,16 +615,25 @@ public class MainActivity extends SherlockActivity {
 				Log.d("Report", "Report Ok");
 				int i=0;
 				for (ParseObject country : ob) {
-					if(i==0){
-					mPrefernceEditor1.putString("Link", (String)country.get("name"));
-					//mPrefernceEditor1.putString("LoginCheck", "1");
-					mPrefernceEditor1.commit();
-					i++;}
-					else{
+					switch(i){
+					case 0:
+						mPrefernceEditor1.putString("Update", (String)country.get("name"));
+						Log.d("Update Status",(String)country.get("name"));
+						mPrefernceEditor1.commit();
+						i++;
+						break;
+					case 1:
+						mPrefernceEditor1.putString("Link", (String)country.get("name"));
+						//mPrefernceEditor1.putString("LoginCheck", "1");
+						mPrefernceEditor1.commit();
+						i++;
+						break;
+					case 2:
 						mPrefernceEditor1.putString("Quote", (String)country.get("name"));
-					mPrefernceEditor1.commit();}
-					// Toast.makeText(getApplicationContext(), "Refreshed", Toast.LENGTH_SHORT).show();;
-	            }
+						mPrefernceEditor1.commit();
+						i++;
+						break;
+					}}
 				getSherlock().setProgressBarIndeterminateVisibility(false);
 				//progressBar.setVisibility(4);
 				mCard();
